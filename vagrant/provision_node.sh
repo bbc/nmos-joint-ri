@@ -16,8 +16,11 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+# All service are run as an ipstudio user
+useradd ipstudio
+
 apt-get update
-apt-get install python-pip devscripts apache2-dev debhelper -y
+apt-get install python-pip devscripts apache2-dev debhelper dh-systemd -y
 pip install --upgrade pip
 pip install setuptools
 
@@ -56,18 +59,18 @@ python setup.py install
 
 cd /home/vagrant/nmos-reverse-proxy
 make deb
-dpkg -i ../nmos-reverse-proxy_*_all.deb
+dpkg -i ../ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-mdns-bridge
-python setup.py install
-cp etc/apache2/sites-available/nmos-api-mdnsbridge-v1_0.conf /etc/apache2/sites-available/
-service mdnsbridge start
-service apache2 reload
+make deb
+dpkg -i ../python-mdnsbridge_0.3.0_all.deb
+sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-node
 python setup.py install
 cp etc/apache2/sites-available/nmos-api-node.conf /etc/apache2/sites-available/
+cp bin/nmosnode /usr/bin
 service nmosnode start
 service apache2 reload
 
