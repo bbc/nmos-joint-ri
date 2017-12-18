@@ -94,7 +94,6 @@ cp -r var/www/connectionManagementDriver /var/www
 cp -r var/www/connectionManagementUI /var/www
 chmod +x /usr/bin/connectionmanagement
 
-service nmosconnection start
 service apache2 restart
 a2ensite nmos-ui.conf
 service apache2 reload
