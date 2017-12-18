@@ -20,7 +20,7 @@ export DEBIAN_FRONTEND=noninteractive
 useradd ipstudio
 
 apt-get update
-apt-get install python-pip devscripts apache2-dev debhelper dh-systemd -y
+apt-get install python-pip python-mock devscripts debhelper equivs -y
 pip install --upgrade pip
 pip install setuptools
 
@@ -58,23 +58,32 @@ cd /home/vagrant/nmos-common
 python setup.py install
 
 cd /home/vagrant/nmos-reverse-proxy
+mk-build-deps debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
 make deb
 dpkg -i ../ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-mdns-bridge
+mk-build-deps --install debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
 make deb
 dpkg -i ../python-mdnsbridge_0.3.0_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-node
-python setup.py install
-cp etc/apache2/sites-available/nmos-api-node.conf /etc/apache2/sites-available/
-cp bin/nmosnode /usr/bin
-service nmosnode start
-service apache2 reload
+mk-build-deps --install debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
+git checkout dev
+make deb
+dpkg -i ../python-nodefacade_0.2.0_all.deb
+sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-device-connection-management-ri
+git checkout dev
 python setup.py install
 
 cp -r bin/connectionmanagement /usr/bin

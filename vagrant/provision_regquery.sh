@@ -20,7 +20,7 @@ export DEBIAN_FRONTEND=noninteractive
 useradd ipstudio
 
 apt-get update
-apt-get install python-pip devscripts apache2-dev debhelper etcd dh-systemd -y
+apt-get install python-pip devscripts equivs -y
 pip install --upgrade pip
 pip install setuptools
 
@@ -58,23 +58,35 @@ cd /home/vagrant/nmos-common
 python setup.py install
 
 cd /home/vagrant/nmos-reverse-proxy
+mk-build-deps debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
 make deb
 dpkg -i ../ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-mdns-bridge
+mk-build-deps debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
 make deb
-dpkg -i ../python-mdnsbridge_0.3.0_all.deb
+dpkg -i ../python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-registration
-python setup.py install
-cp etc/apache2/sites-available/nmos-api-registration.conf /etc/apache2/sites-available/
-service nmosregistration start
-service apache2 reload
+git checkout dev
+mk-build-deps debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
+make deb
+dpkg -i ../python-registryaggregator_*.*_all.deb
+sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-query
-python setup.py install
-cp etc/apache2/sites-available/nmos-api-query.conf /etc/apache2/sites-available/
-service nmosquery start
-service apache2 reload
+git checkout dev
+mk-build-deps debian/control
+dpkg -i *.deb
+sudo apt-get -f -y install
+make deb
+dpkg -i ../python-registryquery_*.*_all.deb
+sudo apt-get -f -y install
