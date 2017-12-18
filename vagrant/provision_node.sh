@@ -77,26 +77,22 @@ cd /home/vagrant/nmos-node
 mk-build-deps --install debian/control
 dpkg -i *.deb
 sudo apt-get -f -y install
-git checkout dev
 make deb
 dpkg -i ../python-nodefacade_0.2.0_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-device-connection-management-ri
-git checkout dev
-python setup.py install
+dpkg -i *.deb
+sudo apt-get -f -y install
+make deb
+dpkg -i ../python-connectionmanagement_*_all.deb
+sudo apt-get -f -y install
 
 cp -r bin/connectionmanagement /usr/bin
 cp -r share/ipp-connectionmanagement /usr/share
-cp -r etc/apache2/sites-available/*.conf /etc/apache2/sites-available/
-cp -r etc/init/nmosconnection.conf /etc/init
-cp -r lib/systemd/system/nmosconnection.service /lib/systemd/system
 cp -r var/www/connectionManagementDriver /var/www
 cp -r var/www/connectionManagementUI /var/www
 chmod +x /usr/bin/connectionmanagement
-
-ln -s /lib/init/upstart-job /etc/init.d/nmosconnection
-ln -s /lib/systemd/system/nmosconnection.service /etc/systemd/system/multi-user.target.wants/nmosconnection.service
 
 service nmosconnection start
 service apache2 restart

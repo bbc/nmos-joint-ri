@@ -74,7 +74,6 @@ dpkg -i ../python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-registration
-git checkout dev
 mk-build-deps debian/control
 dpkg -i *.deb
 sudo apt-get -f -y install
@@ -83,7 +82,6 @@ dpkg -i ../python-registryaggregator_*.*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-query
-git checkout dev
 mk-build-deps debian/control
 dpkg -i *.deb
 sudo apt-get -f -y install
