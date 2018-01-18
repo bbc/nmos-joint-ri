@@ -56,6 +56,7 @@ pip install netifaces
 
 cd /home/vagrant/nmos-common
 python setup.py install
+install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
 mk-build-deps debian/control

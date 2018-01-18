@@ -88,3 +88,33 @@ Provides a link to the transport file that should be used to configure receivers
 ### Active Transport Parameters
 
 Displays the transport parameters currently active on the device. The refresh button may be used to update these as required.
+
+## Debugging
+
+### SSH into guests
+
+Vagrant allows ssh into guest machines. To ssh into the node and registry machines respoectivly use the following commands from the Vagrant directory:
+
+```
+vagrant ssh node
+```
+
+```
+vagrant ssh regquery
+```
+
+The directories cloned down during setup are found in the home directory, but have root permissions. As such any operations on them require root privilidges. Software in the repositories may be built using:
+
+```
+sudo make deb
+```
+
+and installed using dpkg in the usual way from the home directory:
+
+```
+sudo dpkg -i ../<deb name>
+```
+
+### Logging
+
+The NMOS software installed on both guests will log into the /var/log/nmos.log. SSH into the guests as detailed above to view these logs.
