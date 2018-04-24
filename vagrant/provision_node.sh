@@ -18,6 +18,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # All service are run as an ipstudio user
 useradd ipstudio
+mkdir /home/ipstudio
+chown -R ipstudio /home/ipstudio
 
 apt-get update
 apt-get install python-pip python-mock devscripts debhelper equivs -y
