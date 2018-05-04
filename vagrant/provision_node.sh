@@ -73,7 +73,7 @@ mk-build-deps --install debian/control
 dpkg -i *.deb
 sudo apt-get -f -y install
 make deb
-dpkg -i ../python-mdnsbridge_0.3.0_all.deb
+dpkg -i ../python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-node
@@ -81,7 +81,7 @@ mk-build-deps --install debian/control
 dpkg -i *.deb
 sudo apt-get -f -y install
 make deb
-dpkg -i ../python-nodefacade_0.2.0_all.deb
+dpkg -i ../python-nodefacade_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-device-connection-management-ri
