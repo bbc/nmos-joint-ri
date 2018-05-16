@@ -22,8 +22,7 @@ mkdir /home/ipstudio
 chown -R ipstudio /home/ipstudio
 
 apt-get update
-apt-get install python-pip python-mock devscripts debhelper equivs -y
-pip install --upgrade pip
+apt-get install python-pip python-mock devscripts debhelper equivs python3-setuptools python-stdeb -y
 pip install setuptools
 
 apt-get install libavahi-compat-libdnssd1 -y
@@ -36,28 +35,8 @@ git clone https://github.com/bbc/nmos-node.git
 git clone https://github.com/bbc/nmos-mdns-bridge.git
 git clone https://github.com/bbc/nmos-device-connection-management-ri.git
 
-pip install -I https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/pybonjour/pybonjour-1.1.1.tar.gz
-pip install --no-deps gevent=="1.0.2"
-pip install --no-deps greenlet=="0.4.2"
-pip install --no-deps gevent-websocket=="0.9.3"
-pip install --no-deps six=="1.10.0"
-pip install --no-deps flask=="0.10.1"
-pip install jinja2=="2.7.2"
-pip install --no-deps werkzeug=="0.9.4"
-pip install --no-deps itsdangerous=="0.24"
-pip install --no-deps socketio-client=="0.5.3"
-pip install --no-deps flask-sockets=="0.1"
-pip install --no-deps pyzmq=="14.0.1"
-pip install --no-deps pygments=="1.6"
-pip install --no-deps python-dateutil
-pip install --no-deps flask-oauthlib=="0.9.1"
-pip install --no-deps ws4py=="0.3.2"
-pip install --no-deps requests=="2.2.1"
-pip install jsonschema=="2.3.0"
-pip install netifaces
-
 cd /home/vagrant/nmos-common
-python setup.py install
+pip install -e . --process-dependency-links
 install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
