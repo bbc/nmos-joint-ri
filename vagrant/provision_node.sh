@@ -15,12 +15,14 @@
 # limitations under the License.
 
 export DEBIAN_FRONTEND=noninteractive
+APT_TOOL='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y'
 
 # All service are run as an ipstudio user
 useradd ipstudio
 mkdir /home/ipstudio
 chown -R ipstudio /home/ipstudio
 
+sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
 apt-get update
 apt-get install python-pip python-mock devscripts debhelper equivs python3-setuptools python-stdeb -y
 pip install setuptools
@@ -40,32 +42,27 @@ pip install -e . --process-dependency-links
 install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
-mk-build-deps debian/control
-dpkg -i *.deb
-sudo apt-get -f -y install
+mk-build-deps --install debian/control --tool "$APT_TOOL"
 make deb
 dpkg -i ../ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-mdns-bridge
-mk-build-deps --install debian/control
-dpkg -i *.deb
-sudo apt-get -f -y install
+make dsc
+mk-build-deps --install deb_dist/mdnsbridge_*.dsc --tool "$APT_TOOL"
 make deb
-dpkg -i ../python-mdnsbridge_*_all.deb
+dpkg -i dist/python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-node
-mk-build-deps --install debian/control
-dpkg -i *.deb
-sudo apt-get -f -y install
+make dsc
+mk-build-deps --install deb_dist/nodefacade_*.dsc --tool "$APT_TOOL"
 make deb
-dpkg -i ../python-nodefacade_*_all.deb
+dpkg -i dist/python-nodefacade_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-device-connection-management-ri
-dpkg -i *.deb
-sudo apt-get -f -y install
+mk-build-deps --install debian/control --tool "$APT_TOOL"
 make deb
 dpkg -i ../python-connectionmanagement_*_all.deb
 sudo apt-get -f -y install
