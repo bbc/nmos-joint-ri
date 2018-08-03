@@ -68,3 +68,10 @@ mk-build-deps --install deb_dist/registryquery_*.dsc --tool "$APT_TOOL"
 make deb
 dpkg -i dist/python-registryquery_*.*_all.deb
 sudo apt-get -f -y install
+
+mkdir -p /etc/ips-regquery/
+mkdir -p /etc/ips-regaggregator/
+echo '{"priority": 0}' > /etc/ips-regquery/config.json
+echo '{"priority": 0}' > /etc/ips-regaggregator/config.json
+service python-registryquery restart
+service python-registryaggregator restart
