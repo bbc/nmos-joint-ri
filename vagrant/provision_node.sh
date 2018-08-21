@@ -14,6 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+COMMON_BRANCH=$1
+MDNS_BRIDGE_BRANCH=$2
+REVERSE_PROXY_BRANCH=$3
+NODE_BRANCH=$4
+CONNECTION_BRANCH=$7
+
 export DEBIAN_FRONTEND=noninteractive
 APT_TOOL='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y'
 
@@ -38,16 +44,19 @@ git clone https://github.com/bbc/nmos-mdns-bridge.git
 git clone https://github.com/bbc/nmos-device-connection-management-ri.git
 
 cd /home/vagrant/nmos-common
+git checkout $COMMON_BRANCH
 pip install -e . --process-dependency-links
 install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
+git checkout $REVERSE_PROXY_BRANCH
 mk-build-deps --install debian/control --tool "$APT_TOOL"
 make deb
 dpkg -i ../ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-mdns-bridge
+git checkout $MDNS_BRIDGE_BRANCH
 make dsc
 mk-build-deps --install deb_dist/mdnsbridge_*.dsc --tool "$APT_TOOL"
 make deb
@@ -55,6 +64,7 @@ dpkg -i dist/python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-node
+git checkout $NODE_BRANCH
 make dsc
 mk-build-deps --install deb_dist/nodefacade_*.dsc --tool "$APT_TOOL"
 make deb
@@ -62,6 +72,7 @@ dpkg -i dist/python-nodefacade_*_all.deb
 sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-device-connection-management-ri
+git checkout $CONNECTION_BRANCH
 mk-build-deps --install debian/control --tool "$APT_TOOL"
 make deb
 dpkg -i ../python-connectionmanagement_*_all.deb

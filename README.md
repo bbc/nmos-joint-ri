@@ -118,3 +118,26 @@ sudo dpkg -i ../<deb name>
 ### Logging
 
 The NMOS software installed on both guests will log into the /var/log/nmos.log. SSH into the guests as detailed above to view these logs.
+
+### Using alternative NMOS branches
+
+The joint RI allows the user to set which branches of each of the NMOS repositories will be used when provisioning. The branches are set in environment variables on the host before the VM is provisioned. This is primarily intended for use in automated testing.
+
+The environment variables to be set are as follows:
+
+```
+NMOS_RI_COMMON_BRANCH
+NMOS_RI_MDNS_BRIDGE_BRANCH
+NMOS_RI_REVERSE_PROXY_BRANCH
+NMOS_RI_NODE_BRANCH
+NMOS_RI_QUERY_BRANCH
+NMOS_RI_REGISTRATION_BRANCH
+NMOS_RI_CONNECTION_BRANCH
+```
+
+For example, the RI may be configured to use the "dev" branch of the reverse proxy as follows:
+
+```
+export NMOS_RI_REVERSE_PROXY_BRANCH=dev
+vagrant up
+```
