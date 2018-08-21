@@ -24,7 +24,7 @@ chown -R ipstudio /home/ipstudio
 
 sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
 apt-get update
-apt-get install python-pip python-mock devscripts debhelper equivs python3-setuptools python-stdeb -y
+apt-get install python-pip python-mock devscripts debhelper equivs python3-setuptools python-stdeb python3 python3-pip tox -y
 pip install setuptools
 
 sudo apt-get install libavahi-compat-libdnssd1 -y
