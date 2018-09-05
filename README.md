@@ -5,7 +5,7 @@
 This repository contains a Vagrant provisioning to build a simulation of a IS-04/05 node, along with a second virtual machine running a IS-04 registry.
 The node VM will also present a user interface for interacting with the APIs, and another which allows senders and receivers to be added to a "mock driver". This mock driver takes the place of the interface that would normally exist between the APIs and a sender or receiver, and allows the user to add mock up senders or receivers to the Connection Management and Node APIs. Note that the VM does not contain any actual RTP senders or receivers - you cannot produce media streams using this software.
 
-The mock user interfaces allows calls to be made the the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8080, and the Query API on port 8082.
+The mock user interfaces allows calls to be made the the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8084, and the Query API on port 8082.
 
 ## Setup
 
@@ -50,7 +50,7 @@ The mock driver is presented on (http://localhost:8858/). Two forms allow the cr
 
 Once added the sender or receiver's UUID will be listed in the table below the form, along with the settings used to create it. Clicking on the dustbin symbol on the right of each entry will remove the corresponding sender/receiver.
 
-Once senders and receivers have been added they will show up in both the Node and Connection APIs on the node machine, and be propagated to the registry. This can be seen by inspecting the APIs presented on ports 8080 (Node machine) and 8082 (registry machine).
+Once senders and receivers have been added they will show up in both the Node and Connection APIs on the node machine, and be propagated to the registry. This can be seen by inspecting the APIs presented on ports 8852 (Node machine) and 8082 (registry machine).
 
 ## IS-05 API User Interface
 
