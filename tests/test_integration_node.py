@@ -23,10 +23,10 @@ class NodeIntegrationTests(unittest.TestCase):
     @classmethod
     def loadPorts(cls):
         try:
-            with open("vagrantPorts.P", "rb") as f:
+            with open("vagrantPorts.json", "r") as f:
                 toReturn = json.load(f)
         except:
-            print("Did not find vagrantPorts.P in current directory, using default ports")
+            print("Did not find vagrantPorts.json in current directory, using default ports")
             toReturn = DEFAULT_PORTS
         return toReturn
 
@@ -49,7 +49,6 @@ class NodeIntegrationTests(unittest.TestCase):
     def test_mdns_bridge__up(self):
         msg = "Could not find MDNS Bridge service"
         self.checkUp('/x-ipstudio/mdnsbridge/v1.0/', self.apiPort, msg)
-
     def test_node_api_up(self):
         msg = "Could not find Node API"
         self.checkUp('/x-nmos/node/', self.apiPort, msg)
