@@ -5,7 +5,7 @@
 This repository contains a Vagrant provisioning to build a simulation of a IS-04/05 node, along with a second virtual machine running a IS-04 registry.
 The node VM will also present a user interface for interacting with the APIs, and another which allows senders and receivers to be added to a "mock driver". This mock driver takes the place of the interface that would normally exist between the APIs and a sender or receiver, and allows the user to add mock up senders or receivers to the Connection Management and Node APIs. Note that the VM does not contain any actual RTP senders or receivers - you cannot produce media streams using this software.
 
-The mock user interfaces allows calls to be made the the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8084, and the Query API on port 8082.
+The mock user interfaces allows calls to be made the the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8884, and the Query API on port 8882. If there are any port colissions on the host, Vagrat will attempt to re-map the ports to compensate. Run Vagrant port <machine name> to check.
 
 ## Setup
 
@@ -15,7 +15,7 @@ For the best experience:
 - Use a host machine running Ubuntu Linux (tested on 16.04 and 14.04) - it may work on other platforms but this has not been tested.
 - Install vagrant using a Virtualbox as a provider (https://www.vagrantup.com/docs/installation/) (https://www.vagrantup.com/docs/virtualbox/).
 
-The Node VM will bind to three host machine ports: 8080 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8860 to present the IS-05 API user interface. The Registration and Query machine will present its APIs on port 8082. If these ports are already in use on the host machine the bindings may be changed in the Vagrant file.
+The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8859 to present the IS-05 API user interface. The Registration and Query machine will present its APIs on port 8882. If these ports are already in use on the host machine the bindings may be changed in the Vagrant file.
 
 ### Installing behind a proxy
 
@@ -50,13 +50,13 @@ The mock driver is presented on (http://localhost:8858/). Two forms allow the cr
 
 Once added the sender or receiver's UUID will be listed in the table below the form, along with the settings used to create it. Clicking on the dustbin symbol on the right of each entry will remove the corresponding sender/receiver.
 
-Once senders and receivers have been added they will show up in both the Node and Connection APIs on the node machine, and be propagated to the registry. This can be seen by inspecting the APIs presented on ports 8852 (Node machine) and 8082 (registry machine).
+Once senders and receivers have been added they will show up in both the Node and Connection APIs on the node machine, and be propagated to the registry. This can be seen by inspecting the APIs presented on ports 8884 (Node machine) and 8882 (registry machine).
 
 ## IS-05 API User Interface
 
-The IS-05 API user interface is presented on (http://localhost:8860/).
+The IS-05 API user interface is presented on (http://localhost:8859/).
 
-The interface defaults to expecting the API to be presented on http://localhost:8080. If this is not the case enter the root URL for the API (e.g http://localhost:12345) into the text box in the top left corner of the page, then click "Change API Root". If your browser supports HTML5, this value is saved to your browser, and will be remembered even if the page is refreshed.
+The interface defaults to expecting the API to be presented on http://localhost:8859. If this is not the case enter the root URL for the API (e.g http://localhost:12345) into the text box in the top left corner of the page, then click "Change API Root". If your browser supports HTML5, this value is saved to your browser, and will be remembered even if the page is refreshed.
 
 If the API currently has senders and receivers registered their UUIDs will be listed below the "Senders" and "Receivers" headings. If no UUIDs are visible this may indicate that the root address for the API is set incorrectly. If using the example API presented by the VM ensure you have used the Mock Driver Interface (see above) to add some senders and receivers. Note that the page must be refreshed before new to update this list.
 
