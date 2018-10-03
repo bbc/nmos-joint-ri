@@ -49,6 +49,7 @@ class NodeIntegrationTests(unittest.TestCase):
     def test_mdns_bridge__up(self):
         msg = "Could not find MDNS Bridge service"
         self.checkUp('/x-ipstudio/mdnsbridge/v1.0/', self.apiPort, msg)
+
     def test_node_api_up(self):
         msg = "Could not find Node API"
         self.checkUp('/x-nmos/node/', self.apiPort, msg)
