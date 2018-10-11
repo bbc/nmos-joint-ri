@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
     regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
     regquery.vm.provision :shell, path: "provision_regquery.sh", args: args
+    regquery.vm.boot_timeout = 600
   end
 
   config.vm.define "node" do |node|
@@ -64,6 +65,7 @@ Vagrant.configure("2") do |config|
     node.vm.network "forwarded_port", type: "dhcp", guest: 8860, host: 8859, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
     node.vm.provision :shell, path: "provision_node.sh", args: args
+    node.vm.boot_timeout = 600
   end
 end
 
