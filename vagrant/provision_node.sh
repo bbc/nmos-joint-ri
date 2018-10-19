@@ -75,7 +75,7 @@ cd /home/vagrant/nmos-device-connection-management-ri
 git checkout $CONNECTION_BRANCH
 mk-build-deps --install deb_dist/connectionmanagement_*.dsc --tool "$APT_TOOL"
 make deb
-dpkg -i ../python-connectionmanagement_*_all.deb
+dpkg -i dist/python-connectionmanagement_*_all.deb
 sudo apt-get -f -y install
 
 cp -r bin/connectionmanagement /usr/bin
