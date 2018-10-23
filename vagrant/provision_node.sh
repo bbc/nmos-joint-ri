@@ -47,6 +47,7 @@ cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
 pip install -e . --process-dependency-links
 install -m 666 /dev/null /var/log/nmos.log
+mv /vagrant/config.json /etc/nmoscommon/config.json
 
 cd /home/vagrant/nmos-reverse-proxy
 git checkout $REVERSE_PROXY_BRANCH
