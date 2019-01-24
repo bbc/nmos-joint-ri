@@ -46,7 +46,7 @@ git clone --verbose https://github.com/bbc/nmos-mdns-bridge.git
 
 cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
-pip install -e . --process-dependency-links
+pip install -e .
 install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
