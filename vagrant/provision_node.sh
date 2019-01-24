@@ -50,6 +50,7 @@ install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
 git checkout $REVERSE_PROXY_BRANCH
+make dsc
 mk-build-deps --install deb_dist/nmos-reverseproxy_*.dsc --tool "$APT_TOOL"
 make deb
 dpkg -i ../ips-reverseproxy-common_*_all.deb
