@@ -30,10 +30,8 @@ chown -R ipstudio /home/ipstudio
 
 sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
 apt-get update
-apt-get install python-pip python-mock devscripts debhelper equivs python3-setuptools python-stdeb python3 python3-pip tox -y
+apt-get install python-pip python3-pip python-mock python3-mock devscripts debhelper equivs python3-setuptools python-stdeb python3 tox -y
 pip install setuptools
-
-apt-get install libavahi-compat-libdnssd1 -y
 
 cd /home/vagrant
 
@@ -46,6 +44,7 @@ git clone https://github.com/bbc/nmos-device-connection-management-ri.git
 cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
 pip install -e .
+pip3 install -e .
 install -m 666 /dev/null /var/log/nmos.log
 
 cd /home/vagrant/nmos-reverse-proxy
