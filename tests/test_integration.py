@@ -66,4 +66,41 @@ class NodeIntegrationTests(unittest.TestCase):
         msg = "Could not find connection management user interface"
         self.checkUp('/', self.uiPort, msg)
 
-    
+
+class RegQueryIntegrationTests(unittest.TestCase):
+
+    @classmethod
+    def loadPorts(cls):
+        try:
+            with open("vagrantPorts.json", "r") as f:
+                toReturn = json.load(f)
+        except:
+            print("Did not find vagrantPorts.json in current directory, using default ports")
+            toReturn = DEFAULT_PORTS
+        return toReturn
+
+    @classmethod
+    def setUpClass(cls):
+        ports = cls.loadPorts()
+        print(ports)
+        cls.apiPort = ports['regquery']['80']
+
+    def checkUp(self, path, port, msg):
+        r = requests.get("http://localhost:{}{}".format(port, path))
+        self.assertEqual(r.status_code, 200, msg)
+
+    def test_apache_up(self):
+        msg = "Could not find apache running"
+        self.checkUp('/', self.apiPort, msg)
+
+    def test_mdns_bridge__up(self):
+        msg = "Could not find MDNS Bridge service"
+        self.checkUp('/x-ipstudio/mdnsbridge/v1.0/', self.apiPort, msg)
+
+    def test_reg_api_up(self):
+        msg = "Could not find Registration API"
+        self.checkUp('/x-nmos/registration/', self.apiPort, msg)
+
+    def test_query_api_up(self):
+        msg = "Could not find Query API"
+        self.checkUp('/x-nmos/query/', self.apiPort, msg)
