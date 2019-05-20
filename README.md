@@ -37,6 +37,7 @@ For Windows users the proxy settings will have to be added to the vagrant file. 
 To bring up the vagrant machine:
 
 ```
+cd vagrant
 vagrant up
 ```
 
