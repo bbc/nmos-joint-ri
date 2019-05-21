@@ -30,7 +30,7 @@ chown -R ipstudio /home/ipstudio
 
 sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
 apt-get update
-apt-get install python-pip python3-pip python-mock python3-mock devscripts debhelper equivs python3-setuptools python-stdeb python3 tox -y
+apt-get install python-pip python3-pip python-mock python3-mock devscripts debhelper equivs python3-setuptools python-stdeb python3 libffi-dev tox -y
 pip install setuptools
 
 cd /home/vagrant
