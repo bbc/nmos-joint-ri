@@ -1,0 +1,7 @@
+---
+# module: nmos-auth-reverse-proxy/tasks
+# description: Install reverse proxy conf for nmosauth
+
+- name: Copy apache conf file
+  command: cp /home/vagrant/nmos-auth-server/debian/ips-api-auth.conf /etc/apache2/sites-available
+  notify: Restart apache service
