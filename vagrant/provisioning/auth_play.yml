@@ -1,0 +1,6 @@
+---
+- name: Auth Server Install
+  hosts: auth
+  become: yes
+  roles:
+    - nmos-auth-install

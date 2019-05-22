@@ -1,0 +1,10 @@
+---
+# name: nmos-auth-install/handlers
+# description: Restart nmosauth if need be
+
+- name: Restart nmosauth service
+  systemd:
+    name: python-nmos-auth.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

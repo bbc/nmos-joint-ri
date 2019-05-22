@@ -1,0 +1,33 @@
+---
+# module: nmos-auth-install/tasks
+# description: Download artefact, install service for squirrelmediastore
+
+- name: Check if bin file exists
+  stat: path=/home/vagrant/nmos-auth-server/bin/nmosauth
+  register: checkbin
+
+- name: Move bin file
+  command: cp /home/vagrant/nmos-auth-server/bin/nmosauth /usr/bin
+  when: checkbin.stat.exists
+
+- name: Change file ownership, group and permissions
+  file:
+    path: /usr/bin/nmosauth
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Make directory for vars
+  become: true
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    state: directory
+
+- name: Generate certificate
+  command: /home/vagrant/nmos-auth-server/nmosauth/certs/generate_cert.sh
+
+- name: Create nmosauth service file
+  command: cp /home/vagrant/nmos-auth-server/debian/python-nmos-auth.service /lib/systemd/system
+  notify: Restart nmosauth service
