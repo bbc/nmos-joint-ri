@@ -2,25 +2,12 @@
 # module: nmos-auth-install/tasks
 # description: Install NMOS Auth Server
 
-- name: Move bin file
-  file:
-    src: /home/vagrant/nmos-auth-server/bin/nmosauth
-    dest: /usr/bin/nmosauth
-    owner: root
-    group: root
-    mode: '0755'
-    state: link
-
 - name: Make directory for nmosauth config
-  become: true
   file:
     path: /var/nmosauth
     owner: ipstudio
     group: ipstudio
-    state: directory
-
-- name: Generate certificate
-  command: /home/vagrant/nmos-auth-server/nmosauth/certs/generate_cert.sh
+    recurse: yes
 
 - name: Create nmosauth service file
   copy:

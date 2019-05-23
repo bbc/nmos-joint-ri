@@ -63,4 +63,4 @@ sudo apt-get -f -y install
 
 cd /home/vagrant/nmos-auth-server
 git checkout $AUTH_BRANCH
-sudo pip install .  
+sudo pip install . --no-binary :all:
