@@ -1,7 +1,7 @@
 nmos-auth-install
 =========
 
-This module installs nmosauth
+This module installs nmos-auth
 
 Requirements
 ------------

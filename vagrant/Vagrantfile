@@ -64,8 +64,7 @@ Vagrant.configure("2") do |config|
     auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
     auth.vm.provision :shell, path: "provisioning/provision_auth.sh", args: args
-    # Only execute once the Ansible provisioner,
-    # when all the machines are up and ready.
+
     auth.vm.provision :ansible do |ansible|
       ansible.playbook = "provisioning/auth_play.yml"
     end
