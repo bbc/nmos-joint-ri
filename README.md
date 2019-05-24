@@ -9,7 +9,7 @@ This repository contains a Vagrant provisioning to build 3 virtual machines:
 
 The node VM will also present a user interface for interacting with the APIs, and another which allows senders and receivers to be added to a "mock driver". This mock driver takes the place of the interface that would normally exist between the APIs and a sender or receiver, and allows the user to add mock up senders or receivers to the Connection Management and Node APIs. Note that the VM does not contain any actual RTP senders or receivers - you cannot produce media streams using this software.
 
-The mock user interfaces allows calls to be made to the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8884, and the Query API on port 8882. If there are any port colissions on the host, Vagrat will attempt to re-map the ports to compensate. Run `vagrant port <machine name>` to check.
+The mock user interfaces allows calls to be made to the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8884, and the Query API on port 8882. If there are any port collisions on the host, Vagrant will attempt to re-map the ports to compensate. Run `vagrant port <machine name>` to check.
 
 ## Setup
 
