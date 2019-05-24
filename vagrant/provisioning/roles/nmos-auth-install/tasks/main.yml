@@ -1,0 +1,17 @@
+---
+# module: nmos-auth-install/tasks
+# description: Install NMOS Auth Server
+
+- name: Make directory for nmosauth config
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    recurse: yes
+
+- name: Create nmosauth service file
+  copy:
+    src: /home/vagrant/nmos-auth-server/debian/python-nmos-auth.service
+    dest: /lib/systemd/system
+    remote_src: yes
+  notify: Restart nmosauth service

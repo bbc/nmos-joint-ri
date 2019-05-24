@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2017 British Broadcasting Corporation
+# Copyright 2019 British Broadcasting Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,7 @@
 COMMON_BRANCH=$1
 MDNS_BRIDGE_BRANCH=$2
 REVERSE_PROXY_BRANCH=$3
-QUERY_BRANCH=$5
-REGISTRATION_BRANCH=$6
+AUTH_BRANCH=$6
 
 export DEBIAN_FRONTEND=noninteractive
 APT_TOOL='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y'
@@ -37,9 +36,8 @@ cd /home/vagrant
 
 git clone --verbose https://github.com/bbc/nmos-common.git
 git clone --verbose https://github.com/bbc/nmos-reverse-proxy.git
-git clone --verbose https://github.com/bbc/nmos-query.git
-git clone --verbose https://github.com/bbc/nmos-registration.git
 git clone --verbose https://github.com/bbc/nmos-mdns-bridge.git
+git clone --verbose https://github.com/bbc/nmos-auth-server.git
 
 cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
@@ -63,25 +61,6 @@ make deb
 dpkg -i dist/python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
-cd /home/vagrant/nmos-registration
-git checkout $REGISTRATION_BRANCH
-make dsc
-mk-build-deps --install deb_dist/registryaggregator_*.dsc --tool "$APT_TOOL"
-make deb
-dpkg -i dist/python-registryaggregator_*.*_all.deb
-sudo apt-get -f -y install
-
-cd /home/vagrant/nmos-query
-git checkout $QUERY_BRANCH
-make dsc
-mk-build-deps --install deb_dist/registryquery_*.dsc --tool "$APT_TOOL"
-make deb
-dpkg -i dist/python-registryquery_*.*_all.deb
-sudo apt-get -f -y install
-
-mkdir -p /etc/ips-regquery/
-mkdir -p /etc/ips-regaggregator/
-echo '{"priority": 0}' > /etc/ips-regquery/config.json
-echo '{"priority": 0}' > /etc/ips-regaggregator/config.json
-service python-registryquery restart
-service python-registryaggregator restart
+cd /home/vagrant/nmos-auth-server
+git checkout $AUTH_BRANCH
+sudo pip install . --no-binary nmos-auth

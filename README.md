@@ -1,11 +1,15 @@
-# NMOS IS-04 and IS-05 Joint Reference Implementation
+# NMOS IS-04, IS-05 and BCP-003-02 Joint Reference Implementation
 
 ## Introduction
 
-This repository contains a Vagrant provisioning to build a simulation of a IS-04/05 node, along with a second virtual machine running a IS-04 registry.
+This repository contains a Vagrant provisioning to build 3 virtual machines:
+* IS-04/05 node
+* IS-04 registry
+* BCP-003-02 Authorisation Server
+
 The node VM will also present a user interface for interacting with the APIs, and another which allows senders and receivers to be added to a "mock driver". This mock driver takes the place of the interface that would normally exist between the APIs and a sender or receiver, and allows the user to add mock up senders or receivers to the Connection Management and Node APIs. Note that the VM does not contain any actual RTP senders or receivers - you cannot produce media streams using this software.
 
-The mock user interfaces allows calls to be made the the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8884, and the Query API on port 8882. If there are any port colissions on the host, Vagrat will attempt to re-map the ports to compensate. Run Vagrant port <machine name> to check.
+The mock user interfaces allows calls to be made to the IS-05 API, the effects of which can be observed by inspecting the Node and Connection management APIs on port 8884, and the Query API on port 8882. If there are any port collisions on the host, Vagrant will attempt to re-map the ports to compensate. Run `vagrant port <machine name>` to check.
 
 ## Setup
 
@@ -15,7 +19,14 @@ For the best experience:
 - Use a host machine running Ubuntu Linux (tested on 16.04 and 14.04) - it may work on other platforms but this has not been tested.
 - Install vagrant using a Virtualbox as a provider (https://www.vagrantup.com/docs/installation/) (https://www.vagrantup.com/docs/virtualbox/).
 
-The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8859 to present the IS-05 API user interface. The Registration and Query machine will present its APIs on port 8882. If these ports are already in use on the host machine the bindings may be changed in the Vagrant file.
+The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8859 to present the IS-05 API user interface. 
+
+The Registration and Query machine will present its APIs on port 8882. 
+
+The Authorisation Server will present its APIs on port 8886. 
+
+If these ports are already in use on the host machine the bindings may be changed in the Vagrant file.
+
 
 ### Installing behind a proxy
 
@@ -37,6 +48,7 @@ For Windows users the proxy settings will have to be added to the vagrant file. 
 To bring up the vagrant machine:
 
 ```
+cd vagrant
 vagrant up
 ```
 
@@ -103,6 +115,10 @@ vagrant ssh node
 vagrant ssh regquery
 ```
 
+```
+vagrant ssh auth
+```
+
 The directories cloned down during setup are found in the home directory, but have root permissions. As such any operations on them require root privilidges. Software in the repositories may be built using:
 
 ```
@@ -133,6 +149,7 @@ NMOS_RI_NODE_BRANCH
 NMOS_RI_QUERY_BRANCH
 NMOS_RI_REGISTRATION_BRANCH
 NMOS_RI_CONNECTION_BRANCH
+NMOS_RI_AUTH_BRANCH
 ```
 
 For example, the RI may be configured to use the "dev" branch of the reverse proxy as follows:

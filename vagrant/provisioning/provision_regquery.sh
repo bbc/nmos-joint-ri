@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright 2017 British Broadcasting Corporation
+# Copyright 2019 British Broadcasting Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 COMMON_BRANCH=$1
 MDNS_BRIDGE_BRANCH=$2
 REVERSE_PROXY_BRANCH=$3
-NODE_BRANCH=$4
-CONNECTION_BRANCH=$7
+QUERY_BRANCH=$5
+REGISTRATION_BRANCH=$6
 
 export DEBIAN_FRONTEND=noninteractive
 APT_TOOL='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y'
@@ -35,11 +35,11 @@ pip install setuptools
 
 cd /home/vagrant
 
-git clone https://github.com/bbc/nmos-common.git
-git clone https://github.com/bbc/nmos-reverse-proxy.git
-git clone https://github.com/bbc/nmos-node.git
-git clone https://github.com/bbc/nmos-mdns-bridge.git
-git clone https://github.com/bbc/nmos-device-connection-management-ri.git
+git clone --verbose https://github.com/bbc/nmos-common.git
+git clone --verbose https://github.com/bbc/nmos-reverse-proxy.git
+git clone --verbose https://github.com/bbc/nmos-query.git
+git clone --verbose https://github.com/bbc/nmos-registration.git
+git clone --verbose https://github.com/bbc/nmos-mdns-bridge.git
 
 cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
@@ -63,27 +63,25 @@ make deb
 dpkg -i dist/python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
 
-cd /home/vagrant/nmos-node
-git checkout $NODE_BRANCH
+cd /home/vagrant/nmos-registration
+git checkout $REGISTRATION_BRANCH
 make dsc
-mk-build-deps --install deb_dist/nodefacade_*.dsc --tool "$APT_TOOL"
+mk-build-deps --install deb_dist/registryaggregator_*.dsc --tool "$APT_TOOL"
 make deb
-dpkg -i dist/python-nodefacade_*_all.deb
+dpkg -i dist/python-registryaggregator_*.*_all.deb
 sudo apt-get -f -y install
 
-cd /home/vagrant/nmos-device-connection-management-ri
-git checkout $CONNECTION_BRANCH
-mk-build-deps --install deb_dist/connectionmanagement_*.dsc --tool "$APT_TOOL"
+cd /home/vagrant/nmos-query
+git checkout $QUERY_BRANCH
+make dsc
+mk-build-deps --install deb_dist/registryquery_*.dsc --tool "$APT_TOOL"
 make deb
-dpkg -i dist/python-connectionmanagement_*_all.deb
+dpkg -i dist/python-registryquery_*.*_all.deb
 sudo apt-get -f -y install
 
-cp -r bin/connectionmanagement /usr/bin
-cp -r share/ipp-connectionmanagement /usr/share
-cp -r var/www/connectionManagementDriver /var/www
-cp -r var/www/connectionManagementUI /var/www
-chmod +x /usr/bin/connectionmanagement
-
-service apache2 restart
-a2ensite nmos-ui.conf
-service apache2 reload
+mkdir -p /etc/ips-regquery/
+mkdir -p /etc/ips-regaggregator/
+echo '{"priority": 0}' > /etc/ips-regquery/config.json
+echo '{"priority": 0}' > /etc/ips-regaggregator/config.json
+service python-registryquery restart
+service python-registryaggregator restart
