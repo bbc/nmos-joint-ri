@@ -60,7 +60,3 @@ mk-build-deps --install deb_dist/mdnsbridge_*.dsc --tool "$APT_TOOL"
 make deb
 dpkg -i dist/python-mdnsbridge_*_all.deb
 sudo apt-get -f -y install
-
-cd /home/vagrant/nmos-auth-server
-git checkout $AUTH_BRANCH
-sudo pip install . --no-binary :all:

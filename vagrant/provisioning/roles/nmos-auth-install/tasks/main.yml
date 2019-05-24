@@ -2,7 +2,20 @@
 # module: nmos-auth-install/tasks
 # description: Install NMOS Auth Server
 
-- name: Make directory for nmosauth config
+- name: Clone nmos-auth repo
+  git:
+    repo: 'https://github.com/bbc/nmos-auth-server.git'
+    dest: /home/vagrant/nmos-auth-server
+    version: "{{ nmos_auth_repo_branch}}"
+
+- name: Install python package and dependencies
+  pip:
+    name: "."
+    chdir: /home/vagrant/nmos-auth-server
+    extra_args: "--no-binary :all:"
+    executable: pip2
+
+- name: Change directory permissions for nmosauth config files
   file:
     path: /var/nmosauth
     owner: ipstudio
