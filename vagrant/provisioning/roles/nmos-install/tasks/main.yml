@@ -7,30 +7,35 @@
 
 - name: Clone repo
   git:
-    repo: 'https://github.com/bbc/nmos-mdns-bridge.git'
-    dest: /home/vagrant/nmos-mdns-bridge
-    version: "{{ nmos_mdns_bridge_repo_branch }}"
+    repo: "{{ item.repo_url }}"
+    dest: "/home/vagrant/{{ item.package_name }}"
+    version: "{{ item.branch }}"
+  with_items: "{{ dev_packages_list }}"
 
 - name: Install python package and dependencies
   pip:
     name: "."
-    chdir: /home/vagrant/nmos-mdns-bridge
-    extra_args: "--no-binary mdnsbridge"
+    chdir: "/home/vagrant/{{ item.package_name }}"
+    extra_args: "--no-binary {{ item.package_name }}"
     executable: pip2
+  with_items: "{{ dev_packages_list }}"
+  notify: Restart python service
 
 - name: Create service file
   copy:
-    src: /home/vagrant/nmos-mdns-bridge/debian/python-mdnsbridge.service
+    src: "/home/vagrant/{{ item.package_name }}/debian/{{ item.service_file }}"
     dest: /lib/systemd/system
     remote_src: yes
+  with_items: "{{ dev_packages_list }}"
   notify: Restart python service
 
 - name: Copy apache conf file
   copy:
-    src: /home/vagrant/nmos-mdns-bridge/debian/ips-api-mdnsbridge.conf
-    dest: /etc/apache2/sites-available/ips-api-mdnsbridge.conf
+    src: "/home/vagrant/{{ item.package_name }}/debian/{{ item.reverse_proxy_file }}"
+    dest: /etc/apache2/sites-available/
     owner: root
     group: root
     mode: '0644'
     remote_src: yes
+  with_items: "{{ dev_packages_list }}"
   notify: Restart apache service

@@ -1,6 +1,0 @@
-*.retry
-*.swp
-*.log
-*.vagrant
-roles/*
-roles-d*/*

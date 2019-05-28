@@ -4,5 +4,3 @@
   become: yes
   roles:
     - nmos-install
-    - nmos-auth-install
-    - nmos-auth-reverse-proxy
