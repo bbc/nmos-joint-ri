@@ -1,0 +1,14 @@
+---
+
+# List of development packages to be installed
+dev_packages_list:                               
+  - package_name: mdnsbridge
+    repo_url: "https://github.com/bbc/nmos-mdns-bridge.git"
+    branch: jamesg-systemd-conflict
+    service_file: "python-mdnsbridge.service"
+    reverse_proxy_file: "ips-api-mdnsbridge.conf"
+  - package_name: nmos-auth
+    repo_url: "https://github.com/bbc/nmos-auth-server.git"
+    branch: master
+    service_file: "python-nmos-auth.service"
+    reverse_proxy_file: "ips-api-auth.conf"

@@ -21,6 +21,13 @@
   with_items: "{{ dev_packages_list }}"
   notify: Restart python service
 
+- name: Change directory permissions for nmosauth config files
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    recurse: yes
+
 - name: Create service file
   copy:
     src: "/home/vagrant/{{ item.package_name }}/debian/{{ item.service_file }}"

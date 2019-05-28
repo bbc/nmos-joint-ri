@@ -4,10 +4,11 @@
 
 - name: Restart python service
   systemd:
-    name: python-mdnsbridge.service
+    name: "{{ item.service_file }}"
     state: restarted
     enabled: true
     daemon_reload: true
+  with_items: "{{ dev_packages_list }}"
 
 - name: Restart apache service
   systemd:
