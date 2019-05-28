@@ -1,0 +1,36 @@
+---
+# module: nmos-install/tasks
+# description: Install NMOS services and dependencies 
+
+- name: Install all required packages for nmos-install
+  apt: pkg={{ packages }} state=present
+
+- name: Clone repo
+  git:
+    repo: 'https://github.com/bbc/nmos-mdns-bridge.git'
+    dest: /home/vagrant/nmos-mdns-bridge
+    version: "{{ nmos_mdns_bridge_repo_branch }}"
+
+- name: Install python package and dependencies
+  pip:
+    name: "."
+    chdir: /home/vagrant/nmos-mdns-bridge
+    extra_args: "--no-binary mdnsbridge"
+    executable: pip2
+
+- name: Create service file
+  copy:
+    src: /home/vagrant/nmos-mdns-bridge/debian/python-mdnsbridge.service
+    dest: /lib/systemd/system
+    remote_src: yes
+  notify: Restart python service
+
+- name: Copy apache conf file
+  copy:
+    src: /home/vagrant/nmos-mdns-bridge/debian/ips-api-mdnsbridge.conf
+    dest: /etc/apache2/sites-available/ips-api-mdnsbridge.conf
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+  notify: Restart apache service

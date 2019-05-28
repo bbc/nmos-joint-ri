@@ -52,11 +52,3 @@ mk-build-deps --install deb_dist/nmosreverseproxy_*.dsc --tool "$APT_TOOL"
 make deb
 dpkg -i dist/ips-reverseproxy-common_*_all.deb
 sudo apt-get -f -y install
-
-cd /home/vagrant/nmos-mdns-bridge
-git checkout $MDNS_BRIDGE_BRANCH
-make dsc
-mk-build-deps --install deb_dist/mdnsbridge_*.dsc --tool "$APT_TOOL"
-make deb
-dpkg -i dist/python-mdnsbridge_*_all.deb
-sudo apt-get -f -y install

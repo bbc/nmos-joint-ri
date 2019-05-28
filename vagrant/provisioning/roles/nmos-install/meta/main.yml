@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: "James Gibson <james.gibson@bbc.co.uk>"
+  license: N/A
+  min_ansible_version: 2.2
+  platforms:
+   - name: Ubuntu
+     versions:
+      - xenial
+dependencies: []
