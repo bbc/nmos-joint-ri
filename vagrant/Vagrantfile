@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   
   repos = ["COMMON", "MDNS_BRIDGE", "REVERSE_PROXY", "NODE", "QUERY", "REGISTRATION", "CONNECTION", "AUTH"]
   
-  args = Array.new
+  repo_branches = Array.new
   repos.each { |repo|
     if ENV["NMOS_RI_" + repo + "_BRANCH"]
       branch = ENV["NMOS_RI_" + repo + "_BRANCH"]
@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     else
       branch = "master"
     end
-    args.push(branch)
+    repo_branches.push(branch)
   }
 
   config.vm.define "regquery" do |regquery|	
@@ -45,7 +45,7 @@ Vagrant.configure("2") do |config|
     regquery.vm.network "private_network", type: "dhcp"
     regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
-    regquery.vm.provision :shell, path: "provisioning/provision_regquery.sh", args: args
+    regquery.vm.provision :shell, path: "provisioning/provision_regquery.sh", args: repo_branches
     regquery.vm.boot_timeout = 600
   end
 
@@ -67,29 +67,29 @@ Vagrant.configure("2") do |config|
     auth.vm.provision :ansible do |ansible|
       require 'json'
 
-      packages_to_install = [{
+      auth_packages_to_install = [{
         "package_name" => "nmoscommon",
         "repo_url" => "https://github.com/bbc/nmos-common.git",
-        "branch" => args[0]
+        "branch" => repo_branches[0]
       },
       {
         "package_name" => "nmosreverseproxy",
         "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-        "branch" => args[1],
+        "branch" => repo_branches[2],
         "service_file" => "ips-reverseproxy-common.service",
         "reverse_proxy_file" => "ips-reverseproxy-common.conf"
       },
       {
         "package_name" => "mdnsbridge",
         "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
-        "branch" => args[2],
+        "branch" => repo_branches[1],
         "service_file" => "python-mdnsbridge.service",
         "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
       },
       {
         "package_name" => "nmos-auth",
-        "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-        "branch" => args[7],
+        "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
+        "branch" => repo_branches[7],
         "service_file" => "python-nmos-auth.service",
         "reverse_proxy_file" => "ips-api-auth.conf"
       }]
@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "provisioning/install_playbook.yml"
       ansible.host_vars = {
         "auth" => {
-          "dev_packages_list" => "'#{packages_to_install.to_json}'"
+          "dev_packages_list" => "'#{auth_packages_to_install.to_json}'"
         }
       }
       # ansible.verbose = "-v"
@@ -120,7 +120,7 @@ Vagrant.configure("2") do |config|
     node.vm.network "forwarded_port", type: "dhcp", guest: 8858, host: 8858, auto_correct: true
     node.vm.network "forwarded_port", type: "dhcp", guest: 8860, host: 8859, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
-    node.vm.provision :shell, path: "provisioning/provision_node.sh", args: args
+    node.vm.provision :shell, path: "provisioning/provision_node.sh", args: repo_branches
     node.vm.boot_timeout = 600
   end
 end
