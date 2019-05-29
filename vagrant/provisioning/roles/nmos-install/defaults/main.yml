@@ -2,7 +2,7 @@
 # name: nmos-install/defaults
 # description: ALL our default variables for nmos-install go in here
 
-packages:                             # Packages required
+packages:  # Packages required
   - python-pip 
   - python3-pip 
   - python-mock 
@@ -15,5 +15,7 @@ packages:                             # Packages required
   - python3 
   - libffi-dev 
   - tox
-  - build-essential
+  - build-essential  # MDNS Bridge
   - libsystemd-dev
+  - apache2          # Reverse Proxy
+  - apache2-bin # (>=2.4.18)  # or libapache2-mod-proxy-html, ssl-cert, libxml2-dev

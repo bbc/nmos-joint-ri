@@ -1,7 +1,12 @@
 ---
 
 # List of development packages to be installed
-dev_packages_list:                               
+dev_packages_list:  
+  - package_name: nmosreverseproxy
+    repo_url: "https://github.com/bbc/nmos-reverse-proxy.git"
+    branch: master
+    service_file: "ips-reverseproxy-common.service"
+    reverse_proxy_file: "ips-reverseproxy-common.conf"                             
   - package_name: mdnsbridge
     repo_url: "https://github.com/bbc/nmos-mdns-bridge.git"
     branch: jamesg-systemd-conflict

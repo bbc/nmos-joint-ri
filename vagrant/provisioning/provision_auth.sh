@@ -35,20 +35,9 @@ pip install setuptools
 cd /home/vagrant
 
 git clone --verbose https://github.com/bbc/nmos-common.git
-git clone --verbose https://github.com/bbc/nmos-reverse-proxy.git
-git clone --verbose https://github.com/bbc/nmos-mdns-bridge.git
-git clone --verbose https://github.com/bbc/nmos-auth-server.git
 
 cd /home/vagrant/nmos-common
 git checkout $COMMON_BRANCH
 pip install -e .
 pip3 install -e .
 install -m 666 /dev/null /var/log/nmos.log
-
-cd /home/vagrant/nmos-reverse-proxy
-git checkout $REVERSE_PROXY_BRANCH
-make dsc
-mk-build-deps --install deb_dist/nmosreverseproxy_*.dsc --tool "$APT_TOOL"
-make deb
-dpkg -i dist/ips-reverseproxy-common_*_all.deb
-sudo apt-get -f -y install
