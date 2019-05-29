@@ -1,0 +1,9 @@
+---
+- name: Provision NMOS server
+  hosts: 
+    - regquery
+    - node
+    - auth
+  become: yes
+  roles:
+    - nmos-joint-ri-setup

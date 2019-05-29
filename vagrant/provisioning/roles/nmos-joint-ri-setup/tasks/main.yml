@@ -30,11 +30,6 @@
     - /etc/apache2/sites-enabled/000-default.conf
   notify: Restart apache service
 
-- name: Create NMOS log file
-  file: 
-    path: /var/log/nmos.log
-    state: touch
-
 - name: Install NMOS service
   with_items: "{{ dev_packages_list }}"
   include_role: 
@@ -45,10 +40,3 @@
     branch: "{{ item.branch }}"
     service_file: "{{ item.service_file|default([]) }}"
     reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
-
-- name: Change directory permissions for nmosauth config files
-  file:
-    path: /var/nmosauth
-    owner: ipstudio
-    group: ipstudio
-    recurse: yes

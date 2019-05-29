@@ -8,6 +8,12 @@
     dest: "/home/vagrant/{{ package_name }}"
     version: "{{ branch }}"
 
+- name: Create NMOS log file for nmoscommon
+  file: 
+    path: /var/log/nmos.log
+    state: touch
+  when: package_name == "nmoscommon"
+
 - name: Install python package and dependencies
   pip:
     name: "."
@@ -21,6 +27,14 @@
     dest: /lib/systemd/system
     remote_src: yes
   when: service_file != []
+
+- name: Change directory permissions for nmosauth config files
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    recurse: yes
+  when: package_name == "nmos-auth"
 
 - name: Restart service
   systemd:
