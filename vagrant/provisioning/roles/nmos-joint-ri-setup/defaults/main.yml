@@ -1,6 +1,6 @@
 ---
-# name: nmos-install/defaults
-# description: ALL our default variables for nmos-install go in here
+# name: nmos-joint-ri-setup/defaults
+# description: ALL our default variables for nmos-joint-ri-setup go in here
 
 packages:  # Packages required
   - python-pip 

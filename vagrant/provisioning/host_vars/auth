@@ -6,7 +6,7 @@ dev_packages_list:
     repo_url: "https://github.com/bbc/nmos-reverse-proxy.git"
     branch: master
     service_file: "ips-reverseproxy-common.service"
-    reverse_proxy_file: "ips-reverseproxy-common.conf"                             
+    reverse_proxy_file: "ips-reverseproxy-common.conf"
   - package_name: mdnsbridge
     repo_url: "https://github.com/bbc/nmos-mdns-bridge.git"
     branch: jamesg-systemd-conflict
@@ -17,3 +17,7 @@ dev_packages_list:
     branch: master
     service_file: "python-nmos-auth.service"
     reverse_proxy_file: "ips-api-auth.conf"
+
+#  - package_name: nmoscommon
+#    repo_url: "https://github.com/bbc/nmos-common.git"
+#    branch: master

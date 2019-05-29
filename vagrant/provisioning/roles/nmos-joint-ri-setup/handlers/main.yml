@@ -1,0 +1,10 @@
+---
+# name: nmos-joint-ri-setup/handlers
+# description: Restart services if need be
+
+- name: Restart apache service
+  systemd:
+    name: apache2.service
+    state: restarted
+    enabled: true
+    daemon_reload: true

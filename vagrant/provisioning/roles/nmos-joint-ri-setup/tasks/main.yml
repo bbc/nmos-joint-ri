@@ -1,0 +1,54 @@
+---
+# module: nmos-joint-ri-setup/tasks
+# description: Provision NMOS Joint RI VM
+
+- name: Install all required packages for nmos-joint-ri-setup
+  apt: pkg={{ packages }} state=present
+
+- name: Install Apache2 modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items: 
+    - proxy
+    - proxy_http
+    - proxy_ajp
+    - rewrite
+    - deflate
+    - headers
+    - proxy_balancer
+    - proxy_connect
+    - proxy_html
+    - proxy_wstunnel
+    - xml2enc
+    
+- name: Remove default Apache conf files
+  file: 
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/apache2/sites-enabled/000-default.conf
+  notify: Restart apache service
+
+- name: Create NMOS log file
+  file: 
+    path: /var/log/nmos.log
+    state: touch
+
+- name: Install NMOS service
+  with_items: "{{ dev_packages_list }}"
+  include_role: 
+    name: nmos-service-install
+  vars:
+    package_name: "{{ item.package_name }}"
+    repo_url: "{{ item.repo_url }}"
+    branch: "{{ item.branch }}"
+    service_file: "{{ item.service_file }}"
+    reverse_proxy_file: "{{ item.reverse_proxy_file }}"
+
+- name: Change directory permissions for nmosauth config files
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    recurse: yes

@@ -3,4 +3,4 @@
   hosts: auth
   become: yes
   roles:
-    - nmos-install
+    - nmos-joint-ri-setup

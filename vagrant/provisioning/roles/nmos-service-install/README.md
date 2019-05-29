@@ -1,7 +1,7 @@
-nmos-install
+nmos-service-install
 =========
 
-This module installs nmos services
+This module install an NMOS service
 
 Requirements
 ------------
@@ -15,7 +15,7 @@ See defaults for variables and descriptions
 
 ## Usage
 
-This role install the NMOS services specified by the VARS
+This role install the NMOS service specified by the VARS
 
 Dependencies
 ------------
@@ -27,4 +27,4 @@ Example to call:
 
     - hosts: all
       roles:
-         - { role: nmos-install }
+         - { role: nmos-service-install }
