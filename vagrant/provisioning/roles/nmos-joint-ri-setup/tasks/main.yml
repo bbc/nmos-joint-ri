@@ -30,6 +30,10 @@
     - /etc/apache2/sites-enabled/000-default.conf
   notify: Restart apache service
 
+- name: Add ipstudio user
+  user:
+    name: ipstudio
+
 - name: Install NMOS service
   with_items: "{{ dev_packages_list }}"
   include_role: 

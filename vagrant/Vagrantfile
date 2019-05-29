@@ -63,10 +63,9 @@ Vagrant.configure("2") do |config|
     auth.vm.network "private_network", type: "dhcp"
     auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
-    auth.vm.provision :shell, path: "provisioning/provision_auth.sh", args: args
 
     auth.vm.provision :ansible do |ansible|
-      ansible.playbook = "provisioning/auth_play.yml"
+      ansible.playbook = "provisioning/install_playbook.yml"
       ansible.host_vars = {
         "auth" => {
           "nmos_common_repo_branch" => args[0],
