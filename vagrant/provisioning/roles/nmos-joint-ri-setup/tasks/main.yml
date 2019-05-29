@@ -43,8 +43,8 @@
     package_name: "{{ item.package_name }}"
     repo_url: "{{ item.repo_url }}"
     branch: "{{ item.branch }}"
-    service_file: "{{ item.service_file }}"
-    reverse_proxy_file: "{{ item.reverse_proxy_file }}"
+    service_file: "{{ item.service_file|default([]) }}"
+    reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
 
 - name: Change directory permissions for nmosauth config files
   file:

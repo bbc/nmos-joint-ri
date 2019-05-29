@@ -2,6 +2,9 @@
 
 # List of development packages to be installed
 dev_packages_list:  
+  - package_name: nmoscommon
+    repo_url: "https://github.com/bbc/nmos-common.git"
+    branch: master
   - package_name: nmosreverseproxy
     repo_url: "https://github.com/bbc/nmos-reverse-proxy.git"
     branch: master
@@ -17,7 +20,3 @@ dev_packages_list:
     branch: master
     service_file: "python-nmos-auth.service"
     reverse_proxy_file: "ips-api-auth.conf"
-
-#  - package_name: nmoscommon
-#    repo_url: "https://github.com/bbc/nmos-common.git"
-#    branch: master

@@ -20,6 +20,15 @@
     src: "/home/vagrant/{{ package_name }}/debian/{{ service_file }}"
     dest: /lib/systemd/system
     remote_src: yes
+  when: service_file != []
+
+- name: Restart service
+  systemd:
+    name: "{{ service_file }}"
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  when: service_file != []
 
 - name: Copy Apache2 conf file
   copy:
@@ -29,19 +38,14 @@
     group: root
     mode: '0644'
     remote_src: yes
+  when: reverse_proxy_file != []
 
 - name: Enable Apache sites
   file:
     src: "/etc/apache2/sites-available/{{ reverse_proxy_file }}"
     dest: /etc/apache2/sites-enabled/{{ reverse_proxy_file }}
     state: link
-
-- name: Restart service
-  systemd:
-    name: "{{ service_file }}"
-    state: restarted
-    enabled: true
-    daemon_reload: true
+  when: reverse_proxy_file != []
 
 - name: Restart Apache service
   systemd:
@@ -49,3 +53,4 @@
     state: restarted
     enabled: true
     daemon_reload: true
+  when: reverse_proxy_file != []
