@@ -1,4 +1,5 @@
 ---
+# Provision base image
 - name: Provision NMOS server
   hosts: 
     - regquery
@@ -8,6 +9,7 @@
   roles:
     - nmos-joint-ri-setup
 
+# Install each service defined in dev_packages_list variable
 - hosts: 
     - regquery
     - node

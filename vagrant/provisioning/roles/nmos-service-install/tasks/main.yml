@@ -52,6 +52,7 @@
     group: root
     mode: '0644'
     remote_src: yes
+  notify: Restart apache service
   when: reverse_proxy_file != []
 
 - name: Enable Apache sites
@@ -59,12 +60,5 @@
     src: "/etc/apache2/sites-available/{{ reverse_proxy_file }}"
     dest: /etc/apache2/sites-enabled/{{ reverse_proxy_file }}
     state: link
-  when: reverse_proxy_file != []
-
-- name: Restart Apache service
-  systemd:
-    name: apache2.service
-    state: restarted
-    enabled: true
-    daemon_reload: true
+  notify: Restart apache service
   when: reverse_proxy_file != []
