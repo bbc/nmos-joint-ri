@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "provisioning/install_playbook.yml"
       ansible.host_vars = {
         "auth" => {
-          "dev_packages_list" => "'#{auth_packages_to_install.to_json}'"
+          "auth_package_install_list" => "'#{auth_packages_to_install.to_json}'"
         }
       }
       # ansible.verbose = "-v"

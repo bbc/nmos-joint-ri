@@ -1,7 +1,7 @@
 nmos-joint-ri-setup
 =========
 
-This module provsions a NMOS reference implementation VM
+This module provisions a machine with the required packages to run NMOS services
 
 Requirements
 ------------
@@ -15,8 +15,6 @@ See defaults for variables and descriptions
 
 ## Usage
 
-This role install the NMOS services specified by the VARS
-
 Dependencies
 ------------
 
@@ -24,7 +22,9 @@ Example Playbook
 ----------------
 
 Example to call:
-
+```
     - hosts: all
+      become: yes
       roles:
          - { role: nmos-joint-ri-setup }
+```

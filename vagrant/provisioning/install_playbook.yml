@@ -1,19 +1,13 @@
 ---
 # Provision base image
 - name: Provision NMOS server
-  hosts: 
-    - regquery
-    - node
-    - auth
+  hosts: all
   become: yes
   roles:
     - nmos-joint-ri-setup
 
-# Install each service defined in dev_packages_list variable
-- hosts: 
-    - regquery
-    - node
-    - auth
+# Install each service defined in dev_package_install_list variable
+- hosts: auth
   become: yes
   tasks:
     - name: NMOS service install
@@ -25,4 +19,4 @@
         branch: "{{ item.branch }}"
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
-      with_items: "{{ dev_packages_list }}"
+      with_items: "{{ auth_package_install_list }}"
