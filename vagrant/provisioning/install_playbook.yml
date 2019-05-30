@@ -7,3 +7,20 @@
   become: yes
   roles:
     - nmos-joint-ri-setup
+
+- hosts: 
+    - regquery
+    - node
+    - auth
+  become: yes
+  tasks:
+    - name: NMOS service install
+      include_role:
+        name: nmos-service-install
+      vars:
+        package_name: "{{ item.package_name }}"
+        repo_url: "{{ item.repo_url }}"
+        branch: "{{ item.branch }}"
+        service_file: "{{ item.service_file|default([]) }}"
+        reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+      with_items: "{{ dev_packages_list }}"
