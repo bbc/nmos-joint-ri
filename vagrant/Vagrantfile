@@ -46,52 +46,6 @@ Vagrant.configure("2") do |config|
     regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
     regquery.vm.boot_timeout = 600
-
-    regquery.vm.provision :ansible do |ansible|
-      require 'json'
-
-      regquery_packages_to_install = [{
-        "package_name" => "nmoscommon",
-        "repo_url" => "https://github.com/bbc/nmos-common.git",
-        "branch" => repo_branches[0]
-      },
-      {
-        "package_name" => "nmosreverseproxy",
-        "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-        "branch" => repo_branches[2],
-        "service_file" => "ips-reverseproxy-common.service",
-        "reverse_proxy_file" => "ips-reverseproxy-common.conf"
-      },
-      {
-        "package_name" => "mdnsbridge",
-        "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
-        "branch" => repo_branches[1],
-        "service_file" => "python-mdnsbridge.service",
-        "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
-      },
-      {
-        "package_name" => "registryaggregator",
-        "repo_url" => "https://github.com/bbc/nmos-registration.git",
-        "branch" => repo_branches[5],
-        "service_file" => "python-registryaggregator.service",
-        "reverse_proxy_file" => "ips-api-registration.conf"
-      },
-      {
-        "package_name" => "registryquery",
-        "repo_url" => "https://github.com/bbc/nmos-query.git",
-        "branch" => repo_branches[4],
-        "service_file" => "python-registryquery.service",
-        "reverse_proxy_file" => "ips-api-query.conf"
-      }]
-
-      ansible.playbook = "provisioning/install_playbook.yml"
-      ansible.host_vars = {
-        "regquery" => {
-          "regquery_package_install_list" => "'#{regquery_packages_to_install.to_json}'"
-        }
-      }
-      ansible.verbose = "-v"
-    end
   end
 
   config.vm.define "auth" do |auth|	
@@ -109,44 +63,6 @@ Vagrant.configure("2") do |config|
     auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
     auth.vm.boot_timeout = 600
-
-    auth.vm.provision :ansible do |ansible|
-      require 'json'
-
-      auth_packages_to_install = [{
-        "package_name" => "nmoscommon",
-        "repo_url" => "https://github.com/bbc/nmos-common.git",
-        "branch" => repo_branches[0]
-      },
-      {
-        "package_name" => "nmosreverseproxy",
-        "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-        "branch" => repo_branches[2],
-        "service_file" => "ips-reverseproxy-common.service",
-        "reverse_proxy_file" => "ips-reverseproxy-common.conf"
-      },
-      {
-        "package_name" => "mdnsbridge",
-        "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
-        "branch" => repo_branches[1],
-        "service_file" => "python-mdnsbridge.service",
-        "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
-      },
-      {
-        "package_name" => "nmos-auth",
-        "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
-        "branch" => repo_branches[7],
-        "service_file" => "python-nmos-auth.service",
-        "reverse_proxy_file" => "ips-api-auth.conf"
-      }]
-
-      ansible.playbook = "provisioning/install_playbook.yml"
-      ansible.host_vars = {
-        "auth" => {
-          "auth_package_install_list" => "'#{auth_packages_to_install.to_json}'"
-        }
-      }
-    end
   end
 
   config.vm.define "node" do |node|
@@ -165,51 +81,82 @@ Vagrant.configure("2") do |config|
     node.vm.network "forwarded_port", type: "dhcp", guest: 8860, host: 8859, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
     node.vm.boot_timeout = 600
+  end
 
-    node.vm.provision :ansible do |ansible|
-      require 'json'
+# Provision each VM
+  config.vm.provision :ansible do |ansible|
+    require 'json'
 
-      node_packages_to_install = [{
-        "package_name" => "nmoscommon",
-        "repo_url" => "https://github.com/bbc/nmos-common.git",
-        "branch" => repo_branches[0]
-      },
-      {
-        "package_name" => "nmosreverseproxy",
-        "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-        "branch" => repo_branches[2],
-        "service_file" => "ips-reverseproxy-common.service",
-        "reverse_proxy_file" => "ips-reverseproxy-common.conf"
-      },
-      {
-        "package_name" => "mdnsbridge",
-        "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
-        "branch" => repo_branches[1],
-        "service_file" => "python-mdnsbridge.service",
-        "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
-      },
-      {
-        "package_name" => "nodefacade",
-        "repo_url" => "https://github.com/bbc/nmos-node.git",
-        "branch" => repo_branches[3],
-        "service_file" => "python-nodefacade.service",
-        "reverse_proxy_file" => "ips-api-node.conf"
-      },
-      {
-        "package_name" => "connectionmanagement",
-        "repo_url" => "https://github.com/bbc/nmos-device-connection-management-ri.git",
-        "branch" => repo_branches[6],
-        "service_file" => "python-connectionmanagement.service",
-        "reverse_proxy_file" => "nmos-api-nmosconnection.conf"
-      }]
+    packages_to_install = [{
+      "package_name" => "nmoscommon",
+      "repo_url" => "https://github.com/bbc/nmos-common.git",
+      "branch" => repo_branches[0]
+    },
+    {
+      "package_name" => "nmosreverseproxy",
+      "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
+      "branch" => repo_branches[2],
+      "service_file" => "ips-reverseproxy-common.service",
+      "reverse_proxy_file" => "ips-reverseproxy-common.conf"
+    },
+    {
+      "package_name" => "mdnsbridge",
+      "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
+      "branch" => repo_branches[1],
+      "service_file" => "python-mdnsbridge.service",
+      "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
+    }]
 
-      ansible.playbook = "provisioning/install_playbook.yml"
-      ansible.host_vars = {
-        "node" => {
-          "node_package_install_list" => "'#{node_packages_to_install.to_json}'"
-        }
+    regquery_packages_to_install = packages_to_install + [{
+      "package_name" => "registryaggregator",
+      "repo_url" => "https://github.com/bbc/nmos-registration.git",
+      "branch" => repo_branches[5],
+      "service_file" => "python-registryaggregator.service",
+      "reverse_proxy_file" => "ips-api-registration.conf"
+    },
+    {
+      "package_name" => "registryquery",
+      "repo_url" => "https://github.com/bbc/nmos-query.git",
+      "branch" => repo_branches[4],
+      "service_file" => "python-registryquery.service",
+      "reverse_proxy_file" => "ips-api-query.conf"
+    }]
+
+    auth_packages_to_install = packages_to_install + [{
+      "package_name" => "nmos-auth",
+      "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
+      "branch" => repo_branches[7],
+      "service_file" => "python-nmos-auth.service",
+      "reverse_proxy_file" => "ips-api-auth.conf"
+    }]
+
+    node_packages_to_install = packages_to_install + [{
+      "package_name" => "nodefacade",
+      "repo_url" => "https://github.com/bbc/nmos-node.git",
+      "branch" => repo_branches[3],
+      "service_file" => "python-nodefacade.service",
+      "reverse_proxy_file" => "ips-api-node.conf"
+    },
+    {
+      "package_name" => "connectionmanagement",
+      "repo_url" => "https://github.com/bbc/nmos-device-connection-management-ri.git",
+      "branch" => repo_branches[6],
+      "service_file" => "python-connectionmanagement.service",
+      "reverse_proxy_file" => "nmos-api-nmosconnection.conf"
+    }]
+
+    ansible.playbook = "provisioning/install_playbook.yml"
+    ansible.host_vars = {
+      "regquery" => {
+        "regquery_package_install_list" => "'#{regquery_packages_to_install.to_json}'"
+      },
+      "auth" => {
+        "auth_package_install_list" => "'#{auth_packages_to_install.to_json}'"
+      },
+      "node" => {
+        "node_package_install_list" => "'#{node_packages_to_install.to_json}'"
       }
-    end
+    }
   end
 end
 

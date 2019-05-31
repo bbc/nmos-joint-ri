@@ -2,6 +2,10 @@
 # module: nmos-service-install/tasks
 # description: Install NMOS service and its dependencies
 
+- name: Print name of package being installed
+  debug:
+    var: package_name
+
 - name: Clone repo
   git:
     repo: "{{ repo_url }}"
