@@ -1,0 +1,35 @@
+---
+# module: nmos-connectionmanagement-ui/tasks
+# description: Install NMOS connection management UI
+
+- name: Copy share
+  copy:
+    src: /home/vagrant/connectionmanagement/share/ipp-connectionmanagement
+    dest: /usr/share
+    remote_src: yes
+
+- name: Copy site
+  copy:
+    src: "/home/vagrant/connectionmanagement/var/www/{{ item }}"
+    dest: /var/www
+    remote_src: yes
+  with_items:
+    - connectionManagementDriver
+    - connectionManagementUI
+
+- name: Copy Apache2 conf file
+  copy:
+    src: "/home/vagrant/connectionmanagement/debian/nmos-ui.conf"
+    dest: /etc/apache2/sites-available/
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+  notify: Restart apache service
+
+- name: Enable Apache sites
+  file:
+    src: "/etc/apache2/sites-available/nmos-ui.conf"
+    dest: /etc/apache2/sites-enabled/nmos-ui.conf
+    state: link
+  notify: Restart apache service

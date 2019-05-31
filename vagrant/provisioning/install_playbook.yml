@@ -48,3 +48,8 @@
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
       with_items: "{{ node_package_install_list }}"
+
+- hosts: node
+  become: yes
+  roles:
+    - nmos-connectionmanagement-ui
