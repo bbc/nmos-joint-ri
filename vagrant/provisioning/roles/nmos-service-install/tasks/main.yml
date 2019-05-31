@@ -36,6 +36,38 @@
     recurse: yes
   when: package_name == "nmos-auth"
 
+- name: Create query service config directory
+  file:
+    path: '/etc/ips-regquery'
+    owner: ipstudio
+    group: ipstudio
+    state: directory
+  when: package_name == "registryquery"
+
+- name: Create priority config file for query service
+  template:
+    src: config.j2
+    dest: "/etc/ips-regquery/config.json"
+    owner: ipstudio
+    group: ipstudio
+  when: package_name == "registryquery"
+
+- name: Create registry service config directory
+  file:
+    path: '/etc/ips-regaggregator'
+    owner: ipstudio
+    group: ipstudio
+    state: directory
+  when: package_name == "registryaggregator"
+
+- name: Create priority config file for registry service
+  template:
+    src: config.j2
+    dest: "/etc/ips-regaggregator/config.json"
+    owner: ipstudio
+    group: ipstudio
+  when: package_name == "registryaggregator"
+
 - name: Restart service
   systemd:
     name: "{{ service_file }}"
