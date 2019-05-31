@@ -1,0 +1,26 @@
+---
+# module: nmos-service-install/tasks
+# description: Install NMOS systemd service 
+
+- name: Create service file
+  copy:
+    src: "/home/vagrant/{{ package_name }}/debian/{{ service_file }}"
+    dest: /lib/systemd/system
+    remote_src: yes
+  when: service_file != []
+
+- name: Change directory permissions for nmosauth config files
+  file:
+    path: /var/nmosauth
+    owner: ipstudio
+    group: ipstudio
+    recurse: yes
+  when: package_name == "nmos-auth"
+
+- name: Restart service
+  systemd:
+    name: "{{ service_file }}"
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  when: service_file != []

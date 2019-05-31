@@ -1,0 +1,22 @@
+---
+# module: nmos-service-install/tasks
+# description: Install reverse proxy for service
+
+- name: Copy Apache2 conf file
+  copy:
+    src: "/home/vagrant/{{ package_name }}/debian/{{ reverse_proxy_file }}"
+    dest: /etc/apache2/sites-available/
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+  notify: Restart apache service
+  when: reverse_proxy_file != []
+
+- name: Enable Apache sites
+  file:
+    src: "/etc/apache2/sites-available/{{ reverse_proxy_file }}"
+    dest: /etc/apache2/sites-enabled/{{ reverse_proxy_file }}
+    state: link
+  notify: Restart apache service
+  when: reverse_proxy_file != []
