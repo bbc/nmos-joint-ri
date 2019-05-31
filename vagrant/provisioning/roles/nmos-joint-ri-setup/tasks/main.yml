@@ -3,24 +3,15 @@
 # description: Provision NMOS Joint RI VM
 
 - name: Install all required packages for nmos-joint-ri-setup
-  apt: pkg={{ packages }} state=present
+  apt: 
+    pkg: "{{ packages }}"
+    state: present
 
 - name: Install Apache2 modules
   apache2_module:
     state: present
     name: "{{ item }}"
-  with_items: 
-    - proxy
-    - proxy_http
-    - proxy_ajp
-    - rewrite
-    - deflate
-    - headers
-    - proxy_balancer
-    - proxy_connect
-    - proxy_html
-    - proxy_wstunnel
-    - xml2enc
+  with_items: "{{ apache_modules }}"
     
 - name: Remove default Apache conf files
   file: 
