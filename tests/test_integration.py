@@ -105,9 +105,17 @@ class RegQueryIntegrationTests(unittest.TestCase):
         msg = "Could not find Registration API"
         self.checkUp('/x-nmos/registration/', self.apiPort, msg)
 
+    def test_reg_api_nodes(self):
+        msg = "Registration API responded incorrectly"
+        self.checkUp('/x-nmos/registration/v1.2/resource/nodes', self.apiPort, msg)
+
     def test_query_api_up(self):
         msg = "Could not find Query API"
         self.checkUp('/x-nmos/query/', self.apiPort, msg)
+
+    def test_query_api_nodes(self):
+        msg = "Query API responded incorrectly"
+        self.checkUp('/x-nmos/query/v1.2/nodes', self.apiPort, msg)
 
 class AuthIntegrationTests(unittest.TestCase):
 
