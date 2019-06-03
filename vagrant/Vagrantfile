@@ -87,6 +87,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :ansible do |ansible|
     require 'json'
 
+    # List of packages to be installed on all VM's
     packages_to_install = [{
       "package_name" => "nmoscommon",
       "repo_url" => "https://github.com/bbc/nmos-common.git",
@@ -107,6 +108,7 @@ Vagrant.configure("2") do |config|
       "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
     }]
 
+    # Registration and Query server packages
     regquery_packages_to_install = packages_to_install + [{
       "package_name" => "registryaggregator",
       "repo_url" => "https://github.com/bbc/nmos-registration.git",
@@ -123,6 +125,7 @@ Vagrant.configure("2") do |config|
       "reverse_proxy_file" => "ips-api-query.conf"
     }]
 
+    # Autherisation server packages
     auth_packages_to_install = packages_to_install + [{
       "package_name" => "nmos-auth",
       "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
@@ -131,6 +134,7 @@ Vagrant.configure("2") do |config|
       "reverse_proxy_file" => "ips-api-auth.conf"
     }]
 
+    # Node server packages
     node_packages_to_install = packages_to_install + [{
       "package_name" => "nodefacade",
       "repo_url" => "https://github.com/bbc/nmos-node.git",
