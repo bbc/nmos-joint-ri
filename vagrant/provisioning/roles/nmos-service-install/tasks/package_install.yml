@@ -6,6 +6,11 @@
   debug:
     var: package_name
 
+- name: Install required debian packages
+  apt: 
+    pkg: "{{ required_debs }}"
+    state: present
+
 - name: Clone repo
   git:
     repo: "{{ repo_url }}"

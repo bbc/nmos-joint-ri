@@ -19,6 +19,7 @@
         branch: "{{ item.branch }}"
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
       with_items: "{{ auth_package_install_list }}"
 
 - hosts: regquery
@@ -33,6 +34,7 @@
         branch: "{{ item.branch }}"
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
       with_items: "{{ regquery_package_install_list }}"
 
 - hosts: node
@@ -47,6 +49,7 @@
         branch: "{{ item.branch }}"
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
       with_items: "{{ node_package_install_list }}"
 
 - hosts: node

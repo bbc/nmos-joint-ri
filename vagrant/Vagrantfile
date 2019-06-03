@@ -112,7 +112,8 @@ Vagrant.configure("2") do |config|
       "repo_url" => "https://github.com/bbc/nmos-registration.git",
       "branch" => repo_branches[5],
       "service_file" => "python-registryaggregator.service",
-      "reverse_proxy_file" => "ips-api-registration.conf"
+      "reverse_proxy_file" => "ips-api-registration.conf",
+      "required_debs" => ["etcd"]
     },
     {
       "package_name" => "registryquery",
