@@ -117,6 +117,11 @@ class RegQueryIntegrationTests(unittest.TestCase):
         msg = "Query API responded incorrectly"
         self.checkUp('/x-nmos/query/v1.2/nodes', self.apiPort, msg)
 
+    def test_query_api_nodes_not_empty(self):
+        msg = "Query API contains exactly one Node"
+        r = requests.get("http://localhost:{}{}".format(self.apiPort, "/x-nmos/query/v1.2/nodes"))
+        self.assertEqual(len(r.json()), 1, msg)
+
 class AuthIntegrationTests(unittest.TestCase):
 
     @classmethod
