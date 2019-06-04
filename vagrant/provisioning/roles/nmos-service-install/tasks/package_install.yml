@@ -25,6 +25,12 @@
     state: touch
   when: package_name == "nmoscommon"
 
+- name: Create nmoscommon config directory
+  file:
+    path: '/etc/nmoscommon'
+    state: directory
+  when: package_name == "nmoscommon"
+
 - name: Create nmoscommon config file
   template: 
     src: nmoscommon_config.j2
