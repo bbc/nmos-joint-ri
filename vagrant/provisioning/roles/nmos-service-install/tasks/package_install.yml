@@ -20,7 +20,15 @@
 - name: Create NMOS log file for nmoscommon
   file: 
     path: /var/log/nmos.log
+    owner: ipstudio
+    group: ipstudio
     state: touch
+  when: package_name == "nmoscommon"
+
+- name: Create nmoscommon config file
+  template: 
+    src: nmoscommon_config.j2
+    dest: /etc/nmoscommon/config.json
   when: package_name == "nmoscommon"
 
 - name: Create query service config directory
@@ -33,7 +41,7 @@
 
 - name: Create priority config file for query service
   template:
-    src: config.j2
+    src: regquery_config.j2
     dest: "/etc/ips-regquery/config.json"
     owner: ipstudio
     group: ipstudio
@@ -49,7 +57,7 @@
 
 - name: Create priority config file for registry service
   template:
-    src: config.j2
+    src: regquery_config.j2
     dest: "/etc/ips-regaggregator/config.json"
     owner: ipstudio
     group: ipstudio

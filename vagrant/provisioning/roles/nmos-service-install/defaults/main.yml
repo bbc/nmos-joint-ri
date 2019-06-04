@@ -1,0 +1,6 @@
+# name: nmos-service-install/defaults
+# description: ALL our default variables for nmos-service-install go in here
+
+ipsPriority: 0
+dnsDiscover: "false"
+mdnsInterface: "eth1"

@@ -1,0 +1,23 @@
+{
+    "dns_discover": {{ dnsDiscover }},
+    "fix_proxy": "disabled",
+    "https_mode": "disabled",
+    "interfaces": ["{{ mdnsInterface }}"],
+    "logging": {
+        "fileLocation": "/var/log/nmos.log",
+        "level": "DEBUG",
+        "output": [
+            "file",
+            "stdout"
+        ]
+    },
+    "mdns_discover": true,
+    "node_hostname": null,
+    "nodefacade": {
+        "NODE_REGVERSION": "v1.2"
+    },
+    "oauth_mode": false,
+    "prefer_hostnames": false,
+    "prefer_ipv6": false,
+    "priority": {{ ipsPriority }}
+}

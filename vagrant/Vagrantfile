@@ -41,7 +41,6 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    
     regquery.vm.network "private_network", type: "dhcp"
     regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
@@ -58,7 +57,6 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    
     auth.vm.network "private_network", type: "dhcp"
     auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
