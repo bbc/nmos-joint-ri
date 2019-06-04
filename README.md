@@ -52,6 +52,11 @@ cd vagrant
 vagrant up
 ```
 
+Test if servers and their services are running
+```
+python -m unittest discover
+```
+
 ## Mock Driver User Interface
 
 The mock driver is presented on (http://localhost:8858/). Two forms allow the creation of mock-up senders and receivers, which have the following options:

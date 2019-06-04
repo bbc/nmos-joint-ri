@@ -20,7 +20,7 @@ Vagrant.configure("2") do |config|
   
   repos = ["COMMON", "MDNS_BRIDGE", "REVERSE_PROXY", "NODE", "QUERY", "REGISTRATION", "CONNECTION", "AUTH"]
   
-  args = Array.new
+  repo_branches = Array.new
   repos.each { |repo|
     if ENV["NMOS_RI_" + repo + "_BRANCH"]
       branch = ENV["NMOS_RI_" + repo + "_BRANCH"]
@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     else
       branch = "master"
     end
-    args.push(branch)
+    repo_branches.push(branch)
   }
 
   config.vm.define "regquery" do |regquery|	
@@ -41,11 +41,9 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    
     regquery.vm.network "private_network", type: "dhcp"
     regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
-    regquery.vm.provision :shell, path: "provisioning/provision_regquery.sh", args: args
     regquery.vm.boot_timeout = 600
   end
 
@@ -59,15 +57,9 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    
     auth.vm.network "private_network", type: "dhcp"
     auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
-    auth.vm.provision :shell, path: "provisioning/provision_auth.sh", args: args
-
-    auth.vm.provision :ansible do |ansible|
-      ansible.playbook = "provisioning/auth_play.yml"
-    end
     auth.vm.boot_timeout = 600
   end
 
@@ -86,8 +78,88 @@ Vagrant.configure("2") do |config|
     node.vm.network "forwarded_port", type: "dhcp", guest: 8858, host: 8858, auto_correct: true
     node.vm.network "forwarded_port", type: "dhcp", guest: 8860, host: 8859, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
-    node.vm.provision :shell, path: "provisioning/provision_node.sh", args: args
     node.vm.boot_timeout = 600
+  end
+
+# Provision each VM
+  config.vm.provision :ansible do |ansible|
+    require 'json'
+
+    # List of packages to be installed on all VM's
+    packages_to_install = [{
+      "package_name" => "nmoscommon",
+      "repo_url" => "https://github.com/bbc/nmos-common.git",
+      "branch" => repo_branches[0]
+    },
+    {
+      "package_name" => "nmosreverseproxy",
+      "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
+      "branch" => repo_branches[2],
+      "service_file" => "ips-reverseproxy-common.service",
+      "reverse_proxy_file" => "ips-reverseproxy-common.conf"
+    },
+    {
+      "package_name" => "mdnsbridge",
+      "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
+      "branch" => repo_branches[1],
+      "service_file" => "python-mdnsbridge.service",
+      "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
+    }]
+
+    # Registration and Query server packages
+    regquery_packages_to_install = packages_to_install + [{
+      "package_name" => "registryaggregator",
+      "repo_url" => "https://github.com/bbc/nmos-registration.git",
+      "branch" => repo_branches[5],
+      "service_file" => "python-registryaggregator.service",
+      "reverse_proxy_file" => "ips-api-registration.conf",
+      "required_debs" => ["etcd"]
+    },
+    {
+      "package_name" => "registryquery",
+      "repo_url" => "https://github.com/bbc/nmos-query.git",
+      "branch" => repo_branches[4],
+      "service_file" => "python-registryquery.service",
+      "reverse_proxy_file" => "ips-api-query.conf"
+    }]
+
+    # Autherisation server packages
+    auth_packages_to_install = packages_to_install + [{
+      "package_name" => "nmos-auth",
+      "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
+      "branch" => repo_branches[7],
+      "service_file" => "python-nmos-auth.service",
+      "reverse_proxy_file" => "ips-api-auth.conf"
+    }]
+
+    # Node server packages
+    node_packages_to_install = packages_to_install + [{
+      "package_name" => "nodefacade",
+      "repo_url" => "https://github.com/bbc/nmos-node.git",
+      "branch" => repo_branches[3],
+      "service_file" => "python-nodefacade.service",
+      "reverse_proxy_file" => "ips-api-node.conf"
+    },
+    {
+      "package_name" => "connectionmanagement",
+      "repo_url" => "https://github.com/bbc/nmos-device-connection-management-ri.git",
+      "branch" => repo_branches[6],
+      "service_file" => "python-connectionmanagement.service",
+      "reverse_proxy_file" => "nmos-api-nmosconnection.conf"
+    }]
+
+    ansible.playbook = "provisioning/install_playbook.yml"
+    ansible.host_vars = {
+      "regquery" => {
+        "regquery_package_install_list" => "'#{regquery_packages_to_install.to_json}'"
+      },
+      "auth" => {
+        "auth_package_install_list" => "'#{auth_packages_to_install.to_json}'"
+      },
+      "node" => {
+        "node_package_install_list" => "'#{node_packages_to_install.to_json}'"
+      }
+    }
   end
 end
 

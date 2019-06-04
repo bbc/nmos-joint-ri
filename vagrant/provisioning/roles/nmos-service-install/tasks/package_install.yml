@@ -1,0 +1,77 @@
+---
+# module: nmos-service-install/tasks
+# description: Install NMOS python package
+
+- name: Print name of package being installed
+  debug:
+    var: package_name
+
+- name: Install required debian packages
+  apt: 
+    pkg: "{{ required_debs }}"
+    state: present
+
+- name: Clone repo
+  git:
+    repo: "{{ repo_url }}"
+    dest: "/home/vagrant/{{ package_name }}"
+    version: "{{ branch }}"
+
+- name: Create NMOS log file for nmoscommon
+  file: 
+    path: /var/log/nmos.log
+    owner: ipstudio
+    group: ipstudio
+    state: touch
+  when: package_name == "nmoscommon"
+
+- name: Create nmoscommon config directory
+  file:
+    path: '/etc/nmoscommon'
+    state: directory
+  when: package_name == "nmoscommon"
+
+- name: Create nmoscommon config file
+  template: 
+    src: nmoscommon_config.j2
+    dest: /etc/nmoscommon/config.json
+  when: package_name == "nmoscommon"
+
+- name: Create query service config directory
+  file:
+    path: '/etc/ips-regquery'
+    owner: ipstudio
+    group: ipstudio
+    state: directory
+  when: package_name == "registryquery"
+
+- name: Create priority config file for query service
+  template:
+    src: regquery_config.j2
+    dest: "/etc/ips-regquery/config.json"
+    owner: ipstudio
+    group: ipstudio
+  when: package_name == "registryquery"
+
+- name: Create registry service config directory
+  file:
+    path: '/etc/ips-regaggregator'
+    owner: ipstudio
+    group: ipstudio
+    state: directory
+  when: package_name == "registryaggregator"
+
+- name: Create priority config file for registry service
+  template:
+    src: regquery_config.j2
+    dest: "/etc/ips-regaggregator/config.json"
+    owner: ipstudio
+    group: ipstudio
+  when: package_name == "registryaggregator"
+
+- name: Install python package and dependencies
+  pip:
+    name: "."
+    chdir: "/home/vagrant/{{ package_name }}"
+    extra_args: "--no-binary {{ package_name }}"
+    executable: pip2

@@ -1,6 +1,6 @@
 ---
-# name: nmos-auth-reverse-proxy/handlers
-# description: Restart apache if need be
+# name: nmos-joint-ri-setup/handlers
+# description: Restart services if need be
 
 - name: Restart apache service
   systemd:

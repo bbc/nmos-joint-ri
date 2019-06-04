@@ -1,0 +1,10 @@
+---
+# module: nmos-service-install/tasks
+# description: Install NMOS service and its dependencies
+
+- name: package_install
+  include_tasks: package_install.yml
+- name: reverse_proxy
+  include_tasks: reverse_proxy.yml
+- name: service_install
+  include_tasks: service_install.yml

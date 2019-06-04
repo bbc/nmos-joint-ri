@@ -1,0 +1,58 @@
+---
+# Provision base image
+- name: Provision NMOS server
+  hosts: all
+  become: yes
+  roles:
+    - nmos-joint-ri-setup
+
+# Install each service defined in dev_package_install_list variable
+- hosts: auth
+  become: yes
+  tasks:
+    - name: NMOS service install
+      include_role:
+        name: nmos-service-install
+      vars:
+        package_name: "{{ item.package_name }}"
+        repo_url: "{{ item.repo_url }}"
+        branch: "{{ item.branch }}"
+        service_file: "{{ item.service_file|default([]) }}"
+        reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
+      with_items: "{{ auth_package_install_list }}"
+
+- hosts: regquery
+  become: yes
+  tasks:
+    - name: NMOS service install
+      include_role:
+        name: nmos-service-install
+      vars:
+        package_name: "{{ item.package_name }}"
+        repo_url: "{{ item.repo_url }}"
+        branch: "{{ item.branch }}"
+        service_file: "{{ item.service_file|default([]) }}"
+        reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
+      with_items: "{{ regquery_package_install_list }}"
+
+- hosts: node
+  become: yes
+  tasks:
+    - name: NMOS service install
+      include_role:
+        name: nmos-service-install
+      vars:
+        package_name: "{{ item.package_name }}"
+        repo_url: "{{ item.repo_url }}"
+        branch: "{{ item.branch }}"
+        service_file: "{{ item.service_file|default([]) }}"
+        reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        required_debs: "{{ item.required_debs | default([]) }}"
+      with_items: "{{ node_package_install_list }}"
+
+- hosts: node
+  become: yes
+  roles:
+    - nmos-connectionmanagement-ui
