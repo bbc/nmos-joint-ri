@@ -6,7 +6,7 @@ This module provisions a machine with the required packages to run NMOS services
 Requirements
 ------------
 
-This module requires Ansible 2.4
+This module requires Ansible 2.8
 
 Role Variables
 --------------

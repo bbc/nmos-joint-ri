@@ -6,7 +6,7 @@ This module provisions install the NMOS connection management UI
 Requirements
 ------------
 
-This module requires Ansible 2.4
+This module requires Ansible 2.8
 
 Role Variables
 --------------
