@@ -17,19 +17,6 @@ Vagrant.configure("2") do |config|
       config.proxy.no_proxy = ENV["no_proxy"] + ",172.28.0.1/16"
     end
   end
-  
-  repos = ["COMMON", "MDNS_BRIDGE", "REVERSE_PROXY", "NODE", "QUERY", "REGISTRATION", "CONNECTION", "AUTH"]
-  
-  repo_branches = Array.new
-  repos.each { |repo|
-    if ENV["NMOS_RI_" + repo + "_BRANCH"]
-      branch = ENV["NMOS_RI_" + repo + "_BRANCH"]
-      puts "Using " + repo + " branch " + branch
-    else
-      branch = "master"
-    end
-    repo_branches.push(branch)
-  }
 
   config.vm.define "regquery" do |regquery|	
     regquery.vm.hostname = "regquery"
@@ -83,83 +70,7 @@ Vagrant.configure("2") do |config|
 
 # Provision each VM
   config.vm.provision :ansible do |ansible|
-    require 'json'
-
-    # List of packages to be installed on all VM's
-    packages_to_install = [{
-      "package_name" => "nmoscommon",
-      "repo_url" => "https://github.com/bbc/nmos-common.git",
-      "branch" => repo_branches[0]
-    },
-    {
-      "package_name" => "nmosreverseproxy",
-      "repo_url" => "https://github.com/bbc/nmos-reverse-proxy.git",
-      "branch" => repo_branches[2],
-      "service_file" => "ips-reverseproxy-common.service",
-      "reverse_proxy_file" => "ips-reverseproxy-common.conf"
-    },
-    {
-      "package_name" => "mdnsbridge",
-      "repo_url" => "https://github.com/bbc/nmos-mdns-bridge.git",
-      "branch" => repo_branches[1],
-      "service_file" => "python-mdnsbridge.service",
-      "reverse_proxy_file" => "ips-api-mdnsbridge.conf"
-    }]
-
-    # Registration and Query server packages
-    regquery_packages_to_install = packages_to_install + [{
-      "package_name" => "registryaggregator",
-      "repo_url" => "https://github.com/bbc/nmos-registration.git",
-      "branch" => repo_branches[5],
-      "service_file" => "python-registryaggregator.service",
-      "reverse_proxy_file" => "ips-api-registration.conf",
-      "required_debs" => ["etcd"]
-    },
-    {
-      "package_name" => "registryquery",
-      "repo_url" => "https://github.com/bbc/nmos-query.git",
-      "branch" => repo_branches[4],
-      "service_file" => "python-registryquery.service",
-      "reverse_proxy_file" => "ips-api-query.conf"
-    }]
-
-    # Autherisation server packages
-    auth_packages_to_install = packages_to_install + [{
-      "package_name" => "nmos-auth",
-      "repo_url" => "https://github.com/bbc/nmos-auth-server.git",
-      "branch" => repo_branches[7],
-      "service_file" => "python-nmos-auth.service",
-      "reverse_proxy_file" => "ips-api-auth.conf"
-    }]
-
-    # Node server packages
-    node_packages_to_install = packages_to_install + [{
-      "package_name" => "nodefacade",
-      "repo_url" => "https://github.com/bbc/nmos-node.git",
-      "branch" => repo_branches[3],
-      "service_file" => "python-nodefacade.service",
-      "reverse_proxy_file" => "ips-api-node.conf"
-    },
-    {
-      "package_name" => "connectionmanagement",
-      "repo_url" => "https://github.com/bbc/nmos-device-connection-management-ri.git",
-      "branch" => repo_branches[6],
-      "service_file" => "python-connectionmanagement.service",
-      "reverse_proxy_file" => "nmos-api-nmosconnection.conf"
-    }]
-
     ansible.playbook = "provisioning/install_playbook.yml"
-    ansible.host_vars = {
-      "regquery" => {
-        "regquery_package_install_list" => "'#{regquery_packages_to_install.to_json}'"
-      },
-      "auth" => {
-        "auth_package_install_list" => "'#{auth_packages_to_install.to_json}'"
-      },
-      "node" => {
-        "node_package_install_list" => "'#{node_packages_to_install.to_json}'"
-      }
-    }
   end
 end
 
