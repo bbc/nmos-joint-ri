@@ -18,6 +18,10 @@ The mock user interfaces allows calls to be made to the IS-05 API, the effects o
 For the best experience:
 - Use a host machine running Ubuntu Linux (tested on 16.04 and 14.04) - it may work on other platforms but this has not been tested.
 - Install vagrant using a Virtualbox as a provider (https://www.vagrantup.com/docs/installation/) (https://www.vagrantup.com/docs/virtualbox/).
+- Install Ansible 2.8 or newer
+```
+pip install ansible
+```
 
 The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8859 to present the IS-05 API user interface. 
 

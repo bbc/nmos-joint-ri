@@ -1,0 +1,7 @@
+
+specific_packages_to_install: 
+    - package_name: "nmos-auth"
+      repo_url: "https://github.com/bbc/nmos-auth-server.git"
+      branch: "NMOS_RI_AUTH_BRANCH"
+      service_file: "python-nmos-auth.service"
+      reverse_proxy_file: "ips-api-auth.conf"

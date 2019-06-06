@@ -6,7 +6,7 @@ This module install an NMOS service
 Requirements
 ------------
 
-This module requires Ansible 2.4
+This module requires Ansible 2.8
 
 Role Variables
 --------------

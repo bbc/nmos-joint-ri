@@ -1,0 +1,14 @@
+
+specific_packages_to_install: 
+    - package_name: "registryaggregator"
+      repo_url: "https://github.com/bbc/nmos-registration.git"
+      branch: "NMOS_RI_REGISTRATION_BRANCH"
+      service_file: "python-registryaggregator.service"
+      reverse_proxy_file: "ips-api-registration.conf"
+      required_debs: 
+        - etcd
+    - package_name: "registryquery"
+      repo_url: "https://github.com/bbc/nmos-query.git"
+      branch: "NMOS_RI_QUERY_BRANCH"
+      service_file: "python-registryquery.service"
+      reverse_proxy_file: "ips-api-query.conf"

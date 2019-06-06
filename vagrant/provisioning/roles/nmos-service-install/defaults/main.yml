@@ -4,3 +4,7 @@
 ipsPriority: 0
 dnsDiscover: "false"
 mdnsInterface: "eth1"
+
+package_name: "nmoscommon"
+repo_url: "https://github.com/bbc/nmos-common.git"
+branch: "NMOS_RI_COMMON_BRANCH"
