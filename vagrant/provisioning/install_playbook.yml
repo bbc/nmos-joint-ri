@@ -20,7 +20,7 @@
         service_file: "{{ item.service_file|default([]) }}"
         reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
         required_debs: "{{ item.required_debs | default([]) }}"
-      with_items: "{{ packages_to_install }}"
+      with_items: "{{ common_packages_to_install + specific_packages_to_install }}"
 
 - hosts: node
   become: yes
