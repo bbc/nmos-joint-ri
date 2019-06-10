@@ -74,4 +74,4 @@
     name: "."
     chdir: "/home/vagrant/{{ package_name }}"
     extra_args: "--no-binary {{ package_name }}"
-    executable: pip2
+    executable: pip3

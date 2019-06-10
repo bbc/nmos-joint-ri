@@ -24,3 +24,9 @@
 - name: Add ipstudio user
   user:
     name: ipstudio
+
+- name: Use Python 3 by default
+  file:
+    src: 'python3'
+    dest: '/usr/bin/python'
+    state: link
