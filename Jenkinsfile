@@ -20,9 +20,6 @@ pipeline {
             }
         }
         stage ("Integration Tests") {
-            when {
-                expression { params.INTEGRATION_TEST }
-            }
             stages {
                 stage ("Start Test Environment") {
                     steps {
