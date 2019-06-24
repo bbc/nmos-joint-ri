@@ -11,7 +11,6 @@ pipeline {
     environment {
         http_proxy = "http://www-cache.rd.bbc.co.uk:8080"
         https_proxy = "http://www-cache.rd.bbc.co.uk:8080"
-        NMOS_RI_COMMON_BRANCH = "${env.GIT_COMMIT}"
     }
     stages {
         stage("Clean Environment") {
