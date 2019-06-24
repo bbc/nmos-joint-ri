@@ -26,21 +26,15 @@ pipeline {
                             env.int_result = "FAILURE"
                         }
                         bbcGithubNotify(context: "tests/integration", status: "PENDING")
-                        sh 'rm -r nmos-joint-ri || :'
-                        withBBCGithubSSHAgent{
-                            sh 'git clone git@github.com:bbc/nmos-joint-ri.git'
-                        }
-                        dir ('nmos-joint-ri/vagrant') {
+                        dir ('vagrant') {
                             sh 'vagrant up --provision'
                         }
                     }
                 }
                 stage ("Run Integration Tests") {
                     steps {
-                        dir ('nmos-joint-ri') {
-                            bbcVagrantFindPorts(vagrantDir: "vagrant")
-                            sh 'python3 -m unittest discover'
-                        }
+                        bbcVagrantFindPorts(vagrantDir: "vagrant")
+                        sh 'python3 -m unittest discover'
                         script {
                             env.int_result = "SUCCESS"
                         }
