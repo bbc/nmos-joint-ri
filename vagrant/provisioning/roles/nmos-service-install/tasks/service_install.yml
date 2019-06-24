@@ -4,7 +4,7 @@
 
 - name: Create service file
   copy:
-    src: "/home/vagrant/{{ package_name }}/debian/{{ service_file }}"
+    src: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}/debian/{{ service_file }}"
     dest: /lib/systemd/system
     remote_src: yes
   when: service_file != []
