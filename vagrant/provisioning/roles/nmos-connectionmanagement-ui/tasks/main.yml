@@ -3,10 +3,7 @@
 # description: Install NMOS connection management UI
 
 - name: Copy share
-  copy:
-    src: /home/vagrant/connectionmanagement/share/ipp-connectionmanagement
-    dest: /usr/share
-    remote_src: yes
+  command: cp -r /home/vagrant/connectionmanagement/share/ipp-connectionmanagement /usr/share
 
 - name: Copy site
   copy:
