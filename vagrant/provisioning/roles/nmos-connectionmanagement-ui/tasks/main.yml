@@ -3,13 +3,10 @@
 # description: Install NMOS connection management UI
 
 - name: Copy share
-  command: cp -r /home/vagrant/connectionmanagement/share/ipp-connectionmanagement /usr/share
+  command: "cp -r /home/{{ user }}/connectionmanagement/share/ipp-connectionmanagement /usr/share"
 
 - name: Copy site
-  copy:
-    src: "/home/vagrant/connectionmanagement/var/www/{{ item }}"
-    dest: /var/www
-    remote_src: yes
+  command: "cp -r /home/{{ user }}/connectionmanagement/var/www/{{ item }} /var/www"
   with_items:
     - connectionManagementDriver
     - connectionManagementUI
