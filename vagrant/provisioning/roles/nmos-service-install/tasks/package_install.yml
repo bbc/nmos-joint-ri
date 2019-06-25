@@ -14,7 +14,7 @@
 - name: Clone repo
   git:
     repo: "{{ repo_url }}"
-    dest: "/home/{{ ansible_facts['env']['SUDO_USER']/{{ package_name }}"
+    dest: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}"
     version: "{{ branch }}"
 
 - name: Create NMOS log file for nmoscommon
