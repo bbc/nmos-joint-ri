@@ -43,7 +43,7 @@ pipeline {
             }
             post {
                 always {
-                    dir ('nmos-joint-ri/vagrant') {
+                    dir ('vagrant') {
                         sh 'vagrant destroy -f'
                     }
                     bbcGithubNotify(context: "tests/integration", status: env.int_result)
