@@ -3,20 +3,17 @@
 # description: Install NMOS connection management UI
 
 - name: Copy share
-  command: cp -r /home/vagrant/connectionmanagement/share/ipp-connectionmanagement /usr/share
+  command: cp -r /home/{{ ansible_facts['env']['SUDO_USER'] }}/connectionmanagement/share/ipp-connectionmanagement /usr/share
 
 - name: Copy site
-  copy:
-    src: "/home/vagrant/connectionmanagement/var/www/{{ item }}"
-    dest: /var/www
-    remote_src: yes
+  command: cp -r /home/{{ ansible_facts['env']['SUDO_USER'] }}/connectionmanagement/var/www/{{ item }} /var/www
   with_items:
     - connectionManagementDriver
     - connectionManagementUI
 
 - name: Copy Apache2 conf file
   copy:
-    src: "/home/vagrant/connectionmanagement/debian/nmos-ui.conf"
+    src: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/connectionmanagement/debian/nmos-ui.conf"
     dest: /etc/apache2/sites-available/
     owner: root
     group: root

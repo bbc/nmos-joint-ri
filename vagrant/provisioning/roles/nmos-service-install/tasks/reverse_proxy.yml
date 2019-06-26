@@ -4,7 +4,7 @@
 
 - name: Copy Apache2 conf file
   copy:
-    src: "/home/vagrant/{{ package_name }}/debian/{{ reverse_proxy_file }}"
+    src: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}/debian/{{ reverse_proxy_file }}"
     dest: /etc/apache2/sites-available/
     owner: root
     group: root
