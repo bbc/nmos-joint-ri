@@ -29,7 +29,7 @@ pipeline {
                         dir ('vagrant') {
                             sh 'vagrant up --provision'
                         }
-                        sleep(5)
+                        sleep(20)
                     }
                 }
                 stage ("Run Integration Tests") {
