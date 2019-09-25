@@ -56,10 +56,11 @@ cd vagrant
 vagrant up
 ```
 
-Test if servers and their services are running
+Test if servers and their services are running by changing back into the root of this repo and then doing
 ```
 python -m unittest discover
 ```
+You should expect to see a number of tests passing successfully.
 
 ## Mock Driver User Interface
 
