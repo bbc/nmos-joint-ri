@@ -93,7 +93,7 @@ Clicking "Stage Parameters" makes an HTTP PUT request to the API. At present onl
 
 ### Staged Transport File (Receivers Only)
 
-This allows the transport file for a given receivers to be staged. "Transport File Type" should be set to application/sdp if working with SDP files. If passing in the actual content of the sdp file directly "By Reference" should be left un-checked. If passing in a URL to the transport file "By Reference" should be checked. The sdp file contents or the URL pointing to it should be placed in the "Data" box. Optionally the user may provide a Sender ID.
+This allows the transport file for a given receivers to be staged. "Transport File Type" should be set to application/sdp. The sdp file contents should be placed in the "Data" box. Optionally the user may provide a Sender ID.
 
 Clicking "Stage File" will staged these setting to the API. Once again only PUT is supported by the UI, however leaving "Sender ID" empty is acceptable, and will result in the Sender Id being set to "null".
 
