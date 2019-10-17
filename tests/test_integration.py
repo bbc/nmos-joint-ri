@@ -18,6 +18,9 @@ DEFAULT_PORTS = {
     "auth": {
         '80': '8886',
         '22': '2222'
+    },
+    "testing": {
+        '5000': '5000'
     }
 }
 
@@ -29,7 +32,7 @@ class NodeIntegrationTests(unittest.TestCase):
         try:
             with open("vagrantPorts.json", "r") as f:
                 toReturn = json.load(f)
-        except:
+        except Exception:
             print("Did not find vagrantPorts.json in current directory, using default ports")
             toReturn = DEFAULT_PORTS
         return toReturn
@@ -78,7 +81,7 @@ class RegQueryIntegrationTests(unittest.TestCase):
         try:
             with open("vagrantPorts.json", "r") as f:
                 toReturn = json.load(f)
-        except:
+        except Exception:
             print("Did not find vagrantPorts.json in current directory, using default ports")
             toReturn = DEFAULT_PORTS
         return toReturn
@@ -122,6 +125,7 @@ class RegQueryIntegrationTests(unittest.TestCase):
         r = requests.get("http://localhost:{}{}".format(self.apiPort, "/x-nmos/query/v1.2/nodes"))
         self.assertEqual(len(r.json()), 1, msg)
 
+
 class AuthIntegrationTests(unittest.TestCase):
 
     @classmethod
@@ -129,7 +133,7 @@ class AuthIntegrationTests(unittest.TestCase):
         try:
             with open("vagrantPorts.json", "r") as f:
                 toReturn = json.load(f)
-        except:
+        except Exception:
             print("Did not find vagrantPorts.json in current directory, using default ports")
             toReturn = DEFAULT_PORTS
         return toReturn
@@ -155,3 +159,30 @@ class AuthIntegrationTests(unittest.TestCase):
     def test_auth_api_up(self):
         msg = "Could not find Auth API"
         self.checkUp('/x-nmos/auth/', self.apiPort, msg)
+
+
+class TestingIntegrationTests(unittest.TestCase):
+
+    @classmethod
+    def loadPorts(cls):
+        try:
+            with open("vagrantPorts.json", "r") as f:
+                toReturn = json.load(f)
+        except Exception:
+            print("Did not find vagrantPorts.json in current directory, using default ports")
+            toReturn = DEFAULT_PORTS
+        return toReturn
+
+    @classmethod
+    def setUpClass(cls):
+        ports = cls.loadPorts()
+        print(ports)
+        cls.apiPort = ports['testing']['5000']
+
+    def checkUp(self, path, port, msg):
+        r = requests.get("http://localhost:{}{}".format(port, path))
+        self.assertEqual(r.status_code, 200, msg)
+
+    def test_tool_up(self):
+        msg = "Could not find testing tool running"
+        self.checkUp('/', self.apiPort, msg)

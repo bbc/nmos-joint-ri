@@ -6,5 +6,7 @@
   include_tasks: package_install.yml
 - name: reverse_proxy
   include_tasks: reverse_proxy.yml
+- name: testing_tool
+  include_tasks: testing_tool.yml
 - name: service_install
   include_tasks: service_install.yml

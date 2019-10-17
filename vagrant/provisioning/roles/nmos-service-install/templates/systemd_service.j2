@@ -1,0 +1,14 @@
+[Unit]
+Description={{ package_name }}
+Wants=network-online.target apache2.service
+After=network.target network-online.target apache2.service
+
+[Service]
+WorkingDirectory=/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}
+User={{ ansible_facts['env']['SUDO_USER'] }}
+Restart=always
+RestartSec=3
+ExecStart=/usr/bin/python3 /home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}/nmos-test.py
+
+[Install]
+WantedBy=multi-user.target

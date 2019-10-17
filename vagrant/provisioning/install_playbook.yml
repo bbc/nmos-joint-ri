@@ -17,8 +17,8 @@
         package_name: "{{ item.package_name }}"
         repo_url: "{{ item.repo_url }}"
         branch: "{{ lookup('env', item.branch) | default('master', true) }}"
-        service_file: "{{ item.service_file|default([]) }}"
-        reverse_proxy_file: "{{ item.reverse_proxy_file|default([]) }}"
+        service_file: "{{ item.service_file | default([]) }}"
+        reverse_proxy_file: "{{ item.reverse_proxy_file | default([]) }}"
         required_debs: "{{ item.required_debs | default([]) }}"
       with_items: "{{ common_packages_to_install + specific_packages_to_install }}"
 
