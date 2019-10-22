@@ -5,14 +5,14 @@ import json
 
 # Default Vagrant port mappings (should match Vagrant file!)
 DEFAULT_PORTS = {
+    "regquery": {
+        '80': '8882',
+        '22': '2222'
+    },
     "node": {
         '80': '8884',
         '8858': '8858',
-        '8860': '8859',
-        '22': '2222'
-    },
-    "regquery": {
-        '80': '8882',
+        '8860': '8860',
         '22': '2222'
     },
     "auth": {
@@ -20,8 +20,15 @@ DEFAULT_PORTS = {
         '22': '2222'
     },
     "testing": {
-        '5000': '5000'
+        '5000': '8888'
     }
+}
+# Default Vagrant internal IP aaddresses (should match Vagrant file!)
+DEFAULT_IP = {
+    "regquery": "172.28.128.2",
+    "node": "172.28.128.4",
+    "auth": "172.28.128.6",
+    "testing": "172.28.128.8"
 }
 
 
@@ -163,8 +170,7 @@ class AuthIntegrationTests(unittest.TestCase):
 
 class TestingIntegrationTests(unittest.TestCase):
 
-    @classmethod
-    def loadPorts(cls):
+    def loadPorts():
         try:
             with open("vagrantPorts.json", "r") as f:
                 toReturn = json.load(f)
@@ -175,14 +181,98 @@ class TestingIntegrationTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        ports = cls.loadPorts()
-        print(ports)
-        cls.apiPort = ports['testing']['5000']
+        cls.ports = cls.loadPorts()
+        cls.apiPort = cls.ports['testing']['5000']
+        cls.ipAddr = DEFAULT_IP
 
-    def checkUp(self, path, port, msg):
-        r = requests.get("http://localhost:{}{}".format(port, path))
-        self.assertEqual(r.status_code, 200, msg)
+    def checkUp(self, path, port, msg, status_code=200):
+        headers = {
+            "Content-Type": "application/json"
+        }
+        r = requests.get("http://localhost:{}{}".format(port, path), headers=headers)
+        self.assertEqual(
+            r.status_code,
+            status_code,
+            msg + ". Path: {}, Port: {}. Repsonse: {}".format(path, port, r.text)
+        )
+        return r
+
+    def runTest(self, body, query=None, headers=None, msg=""):
+        if not headers:
+            headers = {
+                "Content-Type": "application/json"
+            }
+        resp = requests.post(
+            "http://localhost:{}/api".format(self.apiPort),
+            json=body,
+            params=query,
+            headers=headers
+        )
+        if not msg:
+            msg = "Response: {}: \nBody: {}".format(resp.text, body)
+        self.assertEqual(resp.status_code, 200, msg)
+        return resp
+
+    def checkResults(self, response):
+        for result in response.json()["results"]:
+            self.assertNotEqual(
+                result["state"].lower(),
+                "fail",
+                "failed on test: {} - {}".format(result["name"], result["detail"])
+            )
 
     def test_tool_up(self):
         msg = "Could not find testing tool running"
         self.checkUp('/', self.apiPort, msg)
+        msg = "Could not find API endpoint"
+        # Returns 400 due to no JSON body being present
+        self.checkUp('/api', self.apiPort, msg, 400)
+
+    def test_list_suites(self):
+        body = {
+            "list_suites": True
+        }
+        r = self.runTest(body)
+        self.assertTrue(isinstance(r.json(), list))
+        self.assertTrue("IS-04-01" in r.json())
+
+    def test_run_is04_node(self):
+        body = {
+            "suite": "IS-04-01",
+            "host": [self.ipAddr["node"]],
+            "port": ['80'],
+            "version": ["v1.0"]
+        }
+        resp = self.runTest(body)
+        self.checkResults(resp)
+
+    def test_run_is04_regquery(self):
+        body = {
+            "suite": "IS-04-02",
+            "host": [self.ipAddr["regquery"], self.ipAddr["regquery"]],
+            "port": ['80', '80'],
+            "version": ['v1.0', 'v1.0']
+        }
+        resp = self.runTest(body)
+        self.checkResults(resp)
+
+    def test_run_is05_tests(self):
+        body = {
+            "suite": "IS-05-01",
+            "host": [self.ipAddr["node"]],
+            "port": ['80'],
+            "version": ["v1.0"]
+        }
+        resp = self.runTest(body)
+        self.checkResults(resp)
+
+    # Requires config parameter to be changed
+    def test_run_is10_tests(self):
+        body = {
+            "suite": "IS-10-01",
+            "host": [self.ipAddr["auth"]],
+            "port": ['80'],
+            "version": ["v1.0"]
+        }
+        resp = self.runTest(body)
+        self.checkResults(resp)

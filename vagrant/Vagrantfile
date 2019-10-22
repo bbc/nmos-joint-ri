@@ -31,26 +31,10 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    regquery.vm.network "private_network", type: "dhcp"
-    regquery.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8882, auto_correct: true
+    regquery.vm.network "private_network", ip: "172.28.128.2"
+    regquery.vm.network "forwarded_port", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
     regquery.vm.boot_timeout = 600
-  end
-
-  config.vm.define "auth" do |auth|
-    auth.vm.hostname = "auth"
-    auth.vm.box = "bento/ubuntu-16.04"
-    auth.vm.provider "virtualbox" do |vb|
-      vb.gui = false
-      vb.linked_clone = true
-      vb.memory = 1024
-      vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
-      vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
-    end
-    auth.vm.network "private_network", type: "dhcp"
-    auth.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8886, auto_correct: true
-    auth.vm.synced_folder "../", "/vagrant-root"
-    auth.vm.boot_timeout = 600
   end
 
   config.vm.define "node" do |node|
@@ -63,12 +47,28 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    node.vm.network "private_network", type: "dhcp"
-    node.vm.network "forwarded_port", type: "dhcp", guest: 80, host: 8884, auto_correct: true
-    node.vm.network "forwarded_port", type: "dhcp", guest: 8858, host: 8858, auto_correct: true
-    node.vm.network "forwarded_port", type: "dhcp", guest: 8860, host: 8859, auto_correct: true
+    node.vm.network "private_network", ip: "172.28.128.4"
+    node.vm.network "forwarded_port", guest: 80, host: 8884, auto_correct: true
+    node.vm.network "forwarded_port", guest: 8858, host: 8858, auto_correct: true
+    node.vm.network "forwarded_port", guest: 8860, host: 8860, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
     node.vm.boot_timeout = 600
+  end
+
+  config.vm.define "auth" do |auth|
+    auth.vm.hostname = "auth"
+    auth.vm.box = "bento/ubuntu-16.04"
+    auth.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.linked_clone = true
+      vb.memory = 1024
+      vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
+      vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
+    end
+    auth.vm.network "private_network", ip: "172.28.128.6"
+    auth.vm.network "forwarded_port", guest: 80, host: 8886, auto_correct: true
+    auth.vm.synced_folder "../", "/vagrant-root"
+    auth.vm.boot_timeout = 600
   end
 
   config.vm.define "testing" do |node|
@@ -81,8 +81,8 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    node.vm.network "private_network", type: "dhcp"
-    node.vm.network "forwarded_port", type: "dhcp", guest: 5000, host: 5000, auto_correct: true
+    node.vm.network "private_network", ip: "172.28.128.8"
+    node.vm.network "forwarded_port", type: "dhcp", guest: 5000, host: 8888, auto_correct: true
     node.vm.synced_folder "../", "/vagrant-root"
     node.vm.boot_timeout = 600
   end
