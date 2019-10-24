@@ -23,7 +23,7 @@ DEFAULT_PORTS = {
         '5000': '8888'
     }
 }
-# Default Vagrant internal IP aaddresses (should match Vagrant file!)
+# Default Vagrant internal IP addresses (should match Vagrant file!)
 DEFAULT_IP = {
     "regquery": "172.28.128.2",
     "node": "172.28.128.4",
@@ -193,7 +193,7 @@ class TestingIntegrationTests(unittest.TestCase):
         self.assertEqual(
             r.status_code,
             status_code,
-            msg + ". Path: {}, Port: {}. Repsonse: {}".format(path, port, r.text)
+            msg + ". Path: {}, Port: {}. Response: {}".format(path, port, r.text)
         )
         return r
 
