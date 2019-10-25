@@ -5,6 +5,7 @@ After=network.target network-online.target apache2.service
 
 [Service]
 WorkingDirectory=/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}
+EnvironmentFile=/etc/environment
 User={{ ansible_facts['env']['SUDO_USER'] }}
 Restart=always
 RestartSec=3
