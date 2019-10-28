@@ -6,18 +6,15 @@ import json
 # Default Vagrant port mappings (should match Vagrant file!)
 DEFAULT_PORTS = {
     "regquery": {
-        '80': '8882',
-        '22': '2222'
+        '80': '8882'
     },
     "node": {
         '80': '8884',
         '8858': '8858',
-        '8860': '8860',
-        '22': '2222'
+        '8860': '8860'
     },
     "auth": {
-        '80': '8886',
-        '22': '2222'
+        '80': '8886'
     },
     "testing": {
         '5000': '8888'
@@ -25,10 +22,10 @@ DEFAULT_PORTS = {
 }
 # Default Vagrant internal IP addresses (should match Vagrant file!)
 DEFAULT_IP = {
-    "regquery": "172.28.128.2",
-    "node": "172.28.128.4",
-    "auth": "172.28.128.6",
-    "testing": "172.28.128.8"
+    "regquery": "172.28.128.102",
+    "node": "172.28.128.104",
+    "auth": "172.28.128.106",
+    "testing": "172.28.128.108"
 }
 
 

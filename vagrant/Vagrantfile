@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    testing.vm.network "private_network", ip: "172.28.128.8"
+    testing.vm.network "private_network", ip: "172.28.128.108"
     testing.vm.network "forwarded_port", type: "dhcp", guest: 5000, host: 8888, auto_correct: true
     testing.vm.synced_folder "../", "/vagrant-root"
     testing.vm.boot_timeout = 600
@@ -48,7 +48,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    regquery.vm.network "private_network", ip: "172.28.128.2"
+    regquery.vm.network "private_network", ip: "172.28.128.102"
     regquery.vm.network "forwarded_port", guest: 80, host: 8882, auto_correct: true
     regquery.vm.synced_folder "../", "/vagrant-root"
     regquery.vm.boot_timeout = 600
@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    node.vm.network "private_network", ip: "172.28.128.4"
+    node.vm.network "private_network", ip: "172.28.128.104"
     node.vm.network "forwarded_port", guest: 80, host: 8884, auto_correct: true
     node.vm.network "forwarded_port", guest: 8858, host: 8858, auto_correct: true
     node.vm.network "forwarded_port", guest: 8860, host: 8860, auto_correct: true
@@ -82,7 +82,7 @@ Vagrant.configure("2") do |config|
       vb.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
       vb.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on" ]
     end
-    auth.vm.network "private_network", ip: "172.28.128.6"
+    auth.vm.network "private_network", ip: "172.28.128.106"
     auth.vm.network "forwarded_port", guest: 80, host: 8886, auto_correct: true
     auth.vm.synced_folder "../", "/vagrant-root"
     auth.vm.boot_timeout = 600
