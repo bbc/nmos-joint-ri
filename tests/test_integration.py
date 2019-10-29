@@ -238,7 +238,7 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-04-01",
             "host": [self.ipAddr["node"]],
             "port": ['80'],
-            "version": ["v1.0"]
+            "version": ["v1.2"]
         }
         resp = self.runTest(body)
         self.checkResults(resp)
@@ -248,7 +248,7 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-04-02",
             "host": [self.ipAddr["regquery"], self.ipAddr["regquery"]],
             "port": ['80', '80'],
-            "version": ['v1.0', 'v1.0']
+            "version": ['v1.2', 'v1.2']
         }
         resp = self.runTest(body)
         self.checkResults(resp)
