@@ -35,7 +35,7 @@ pipeline {
                 stage ("Run Integration Tests") {
                     steps {
                         bbcVagrantFindPorts(vagrantDir: "vagrant")
-                        sh 'python3 -m unittest -v discover'
+                        sh 'python3 -m unittest discover -v'
                         script {
                             env.int_result = "SUCCESS"
                         }
