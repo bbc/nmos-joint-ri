@@ -245,11 +245,12 @@ class TestingIntegrationTests(unittest.TestCase):
 
     def checkResults(self, response):
         for result in response.json()["results"]:
-            self.assertNotEqual(
-                result["state"].lower(),
-                "fail",
-                "failed on test: {} - {}".format(result["name"], result["detail"])
-            )
+            with self.subTest(test=result["name"]):
+                self.assertNotEqual(
+                    result["state"].lower(),
+                    "fail",
+                    "failed on test: {} - {}".format(result["name"], result["detail"])
+                )
 
     def test_tool_up(self):
         msg = "Could not find testing tool running"
