@@ -132,6 +132,10 @@ vagrant ssh regquery
 vagrant ssh auth
 ```
 
+```
+vagrant ssh testing
+```
+
 The directories cloned down during setup are found in the home directory, but have root permissions. As such any operations on them require root privilidges. Software in the repositories may be built using:
 
 ```
@@ -163,6 +167,7 @@ NMOS_RI_QUERY_BRANCH
 NMOS_RI_REGISTRATION_BRANCH
 NMOS_RI_CONNECTION_BRANCH
 NMOS_RI_AUTH_BRANCH
+NMOS_RI_TESTING_BRANCH
 ```
 
 For example, the RI may be configured to use the "dev" branch of the reverse proxy as follows:

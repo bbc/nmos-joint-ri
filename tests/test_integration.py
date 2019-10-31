@@ -2,6 +2,7 @@ import unittest
 import requests
 import json
 
+from subprocess import run
 
 # Default Vagrant port mappings (should match Vagrant file!)
 DEFAULT_PORTS = {
@@ -167,6 +168,7 @@ class AuthIntegrationTests(unittest.TestCase):
 
 class TestingIntegrationTests(unittest.TestCase):
 
+    @staticmethod
     def loadPorts():
         try:
             with open("vagrantPorts.json", "r") as f:
@@ -176,11 +178,23 @@ class TestingIntegrationTests(unittest.TestCase):
             toReturn = DEFAULT_PORTS
         return toReturn
 
+    @staticmethod
+    def run_vagrant_command(command):
+        completed_process = run(command.split(), cwd="vagrant")
+        completed_process.check_returncode()
+
     @classmethod
     def setUpClass(cls):
         cls.ports = cls.loadPorts()
         cls.apiPort = cls.ports['testing']['5000']
         cls.ipAddr = DEFAULT_IP
+
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls.run_vagrant_command("vagrant up regquery")
+
+    def tearDown(self):
+        self.changeConfig("ENABLE_HTTPS", False)
 
     def checkUp(self, path, port, msg, status_code=200):
         headers = {
@@ -210,6 +224,25 @@ class TestingIntegrationTests(unittest.TestCase):
         self.assertEqual(resp.status_code, 200, msg)
         return resp
 
+    def changeConfig(self, config_param, config_value, msg=None):
+        headers = {
+            "Content-Type": "application/json"
+        }
+        body = {
+            config_param: config_value
+        }
+        resp = requests.put(
+            "http://localhost:{}/config".format(self.apiPort),
+            json=body,
+            headers=headers
+        )
+        if not msg:
+            msg = "Response: {}: \nBody: {}".format(resp.text, body)
+        self.assertEqual(resp.status_code, 200, msg)
+        self.assertTrue(isinstance(resp.json(), dict))
+        self.assertEqual(resp.json()[config_param], config_value)
+        return resp
+
     def checkResults(self, response):
         for result in response.json()["results"]:
             self.assertNotEqual(
@@ -221,9 +254,14 @@ class TestingIntegrationTests(unittest.TestCase):
     def test_tool_up(self):
         msg = "Could not find testing tool running"
         self.checkUp('/', self.apiPort, msg)
-        msg = "Could not find API endpoint"
-        # Returns 400 due to no JSON body being present
-        self.checkUp('/api', self.apiPort, msg, 400)
+        msg = "Could not find '/api' endpoint"
+        self.checkUp('/api', self.apiPort, msg)
+        msg = "Could not find '/config' endpoint"
+        self.checkUp('/config', self.apiPort, msg)
+
+    def test_change_config(self):
+        """Ensures the Testing Tool correctly passes mDNS traffic through the private interface"""
+        self.changeConfig("BIND_INTERFACE", "eth1")
 
     def test_list_suites(self):
         body = {
@@ -240,6 +278,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "port": ['80'],
             "version": ["v1.2"]
         }
+        # Power down Regquery Node to allow Node instance to register with the Testing Tool's Mock Registries
+        self.run_vagrant_command("vagrant halt regquery")
         resp = self.runTest(body)
         self.checkResults(resp)
 
@@ -250,6 +290,7 @@ class TestingIntegrationTests(unittest.TestCase):
             "port": ['80', '80'],
             "version": ['v1.2', 'v1.2']
         }
+        self.run_vagrant_command("vagrant up regquery")
         resp = self.runTest(body)
         self.checkResults(resp)
 
@@ -263,8 +304,9 @@ class TestingIntegrationTests(unittest.TestCase):
         resp = self.runTest(body)
         self.checkResults(resp)
 
-    # Requires config parameter to be changed
     def test_run_is10_tests(self):
+        # Enable HTTPS must be enabled to successfully run IS-10 Tests
+        self.changeConfig("ENABLE_HTTPS", True)
         body = {
             "suite": "IS-10-01",
             "host": [self.ipAddr["auth"]],
