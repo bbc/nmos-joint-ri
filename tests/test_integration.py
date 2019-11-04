@@ -305,15 +305,4 @@ class TestingIntegrationTests(unittest.TestCase):
         }
         resp = self.runTest(body)
         self.checkResults(resp)
-
-    def test_run_is10_tests(self):
-        # Enable HTTPS must be enabled to successfully run IS-10 Tests
-        self.changeConfig("ENABLE_HTTPS", True)
-        body = {
-            "suite": "IS-10-01",
-            "host": [self.ipAddr["auth"]],
-            "port": ['80'],
-            "version": ["v1.0"]
-        }
-        resp = self.runTest(body)
         self.checkResults(resp)
