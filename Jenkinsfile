@@ -25,6 +25,7 @@ pipeline {
                         script {
                             env.int_result = "FAILURE"
                             env.NMOS_RI_TESTING_BRANCH = "dannym-api"
+                            env.NMOS_RI_COMMON_BRANCH = "jamesg-consistent-iface-selection"
                         }
                         bbcGithubNotify(context: "tests/integration", status: "PENDING")
                         dir ('vagrant') {

@@ -289,7 +289,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-04-02",
             "host": [self.ipAddr["regquery"], self.ipAddr["regquery"]],
             "port": ['80', '80'],
-            "version": ['v1.2', 'v1.2']
+            "version": ['v1.2', 'v1.2'],
+            "ignore": ["test_27", "test_28"]
         }
         self.run_vagrant_command("vagrant up regquery")
         resp = self.runTest(body)
