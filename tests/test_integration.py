@@ -296,7 +296,7 @@ class TestingIntegrationTests(unittest.TestCase):
         resp = self.runTest(body)
         self.checkResults(resp)
 
-    def test_run_is05_tests(self):
+    def test_run_is05_01_tests(self):
         body = {
             "suite": "IS-05-01",
             "host": [self.ipAddr["node"]],
@@ -305,4 +305,13 @@ class TestingIntegrationTests(unittest.TestCase):
         }
         resp = self.runTest(body)
         self.checkResults(resp)
+
+    def test_run_is05_02_tests(self):
+        body = {
+            "suite": "IS-05-02",
+            "host": [self.ipAddr["node"]],
+            "port": ['80'],
+            "version": ["v1.0"]
+        }
+        resp = self.runTest(body)
         self.checkResults(resp)
