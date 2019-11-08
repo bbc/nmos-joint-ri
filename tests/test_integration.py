@@ -309,9 +309,9 @@ class TestingIntegrationTests(unittest.TestCase):
     def test_run_is05_02_tests(self):
         body = {
             "suite": "IS-05-02",
-            "host": [self.ipAddr["node"]],
-            "port": ['80'],
-            "version": ["v1.0"]
+            "host": [self.ipAddr["node"], self.ipAddr["node"]],
+            "port": ['80', '80'],
+            "version": ["v1.2", "v1.0"]
         }
         resp = self.runTest(body)
         self.checkResults(resp)
