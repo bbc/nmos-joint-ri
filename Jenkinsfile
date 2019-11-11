@@ -42,9 +42,9 @@ pipeline {
                         }
                     }
                 }
-                stage ("Analyse XML / JUnit files") {
+                stage ("Analyse JUnit files") {
                     steps {
-                        junit '*.xml'
+                        junit 'tests/*.xml'
                     }
                 }
             }

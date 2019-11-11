@@ -234,7 +234,7 @@ class TestingIntegrationTests(unittest.TestCase):
                 data_format = output_name
                 output_name = "{}-on-{}".format(body["suite"], body["host"][0])
             if data_format.lower() in ["json", "xml"]:
-                with open('{}.{}'.format(output_name, data_format), "w+") as f:
+                with open('tests/{}.{}'.format(output_name, data_format), "w+") as f:
                     if data_format == "xml":
                         f.write(response.text)
                     else:
@@ -298,7 +298,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-04-01",
             "host": [self.ipAddr["node"]],
             "port": ['80'],
-            "version": ["v1.2"]
+            "version": ["v1.2"],
+            "output": "xml"
         }
         # Power down Regquery Node to allow Node instance to register with the Testing Tool's Mock Registries
         self.run_vagrant_command("vagrant halt regquery")
@@ -311,7 +312,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "host": [self.ipAddr["regquery"], self.ipAddr["regquery"]],
             "port": ['80', '80'],
             "version": ['v1.2', 'v1.2'],
-            "ignore": ["test_27", "test_28"]
+            "ignore": ["test_27", "test_28"],
+            "output": "xml"
         }
         self.run_vagrant_command("vagrant up regquery")
         resp = self.runTest(body)
