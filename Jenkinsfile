@@ -42,6 +42,11 @@ pipeline {
                         }
                     }
                 }
+                stage ("Analyse XML / JUnit files") {
+                    steps {
+                        junit '*.xml'
+                    }
+                }
             }
             post {
                 always {

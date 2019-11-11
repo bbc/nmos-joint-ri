@@ -222,7 +222,25 @@ class TestingIntegrationTests(unittest.TestCase):
         if not msg:
             msg = "Response: {}: \nBody: {}".format(resp.text, body)
         self.assertEqual(resp.status_code, 200, msg)
+        self.writeResultsToFile(body, resp)
         return resp
+
+    def writeResultsToFile(self, body, response):
+        output_name = body.get("output")
+        if output_name:
+            if len(output_name.split(".")) == 2:
+                output_name, data_format = output_name.split(".")
+            else:
+                data_format = output_name
+                output_name = "{}-on-{}".format(body["suite"], body["host"][0])
+            if data_format.lower() in ["json", "xml"]:
+                with open('{}.{}'.format(output_name, data_format), "w+") as f:
+                    if data_format == "xml":
+                        f.write(response.text)
+                    else:
+                        json.dump(response.json(), f)
+            else:
+                raise ValueError("Unrecognised output type for test results")
 
     def changeConfig(self, config_param, config_value, msg=None):
         headers = {
@@ -231,7 +249,7 @@ class TestingIntegrationTests(unittest.TestCase):
         body = {
             config_param: config_value
         }
-        resp = requests.put(
+        resp = requests.patch(
             "http://localhost:{}/config".format(self.apiPort),
             json=body,
             headers=headers
@@ -244,13 +262,16 @@ class TestingIntegrationTests(unittest.TestCase):
         return resp
 
     def checkResults(self, response):
-        for result in response.json()["results"]:
-            with self.subTest(test=result["name"]):
-                self.assertNotEqual(
-                    result["state"].lower(),
-                    "fail",
-                    "failed on test: {} - {}".format(result["name"], result["detail"])
-                )
+        try:
+            for result in response.json()["results"]:
+                with self.subTest(test=result["name"]):
+                    self.assertNotEqual(
+                        result["state"].lower(),
+                        "fail",
+                        "failed on test: {} - {}".format(result["name"], result["detail"])
+                    )
+        except Exception:
+            print("Results could not be parsed as JSON. This may be because results have been requested in XML format.")
 
     def test_tool_up(self):
         msg = "Could not find testing tool running"
@@ -301,7 +322,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-05-01",
             "host": [self.ipAddr["node"]],
             "port": ['80'],
-            "version": ["v1.0"]
+            "version": ["v1.0"],
+            "output": "xml"
         }
         resp = self.runTest(body)
         self.checkResults(resp)
@@ -311,7 +333,8 @@ class TestingIntegrationTests(unittest.TestCase):
             "suite": "IS-05-02",
             "host": [self.ipAddr["node"], self.ipAddr["node"]],
             "port": ['80', '80'],
-            "version": ["v1.2", "v1.0"]
+            "version": ["v1.2", "v1.0"],
+            "output": "xml"
         }
         resp = self.runTest(body)
         self.checkResults(resp)
