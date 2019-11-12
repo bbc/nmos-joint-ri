@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label "ubuntu&&apmm-slave"
+        label "ubuntu&&ap-r730-4"
     }
     options {
         ansiColor('xterm') // Add support for coloured output
