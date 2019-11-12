@@ -18,6 +18,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # keep SSH connection alive
+  config.ssh.keep_alive = true
+
   config.vm.define "regquery" do |regquery|	
     regquery.vm.hostname = "regquery"
     regquery.vm.box = "bento/ubuntu-16.04"
