@@ -1,0 +1,26 @@
+---
+- name: Change ownership of nmos-testing directory
+  file:
+    path: /home/vagrant/nmos-testing
+    owner: "{{ ansible_facts['env']['SUDO_USER'] }}"
+    group: "{{ ansible_facts['env']['SUDO_USER'] }}"
+    state: directory
+    recurse: yes
+
+- name: Upgrade pip3
+  command: pip3 install --upgrade pip
+  when: package_name == "nmos-testing"
+
+- name: Install Requirements
+  command: pip3 install -r requirements.txt
+  args:
+    chdir: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}"
+  when: package_name == "nmos-testing"
+
+# - name: Run Testing Tool
+#   command: sudo python3 nmos-test.py
+#   args:
+#     chdir: "/home/{{ ansible_facts['env']['SUDO_USER'] }}/{{ package_name }}"
+#   when: package_name == "nmos-testing"
+#   async: 10
+#   poll: 0

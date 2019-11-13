@@ -7,7 +7,7 @@
     var: package_name
 
 - name: Install required debian packages
-  apt: 
+  apt:
     pkg: "{{ required_debs }}"
     state: present
 
@@ -18,7 +18,7 @@
     version: "{{ branch }}"
 
 - name: Create NMOS log file for nmoscommon
-  file: 
+  file:
     path: /var/log/nmos.log
     owner: ipstudio
     group: ipstudio
@@ -32,7 +32,7 @@
   when: package_name == "nmoscommon"
 
 - name: Create nmoscommon config file
-  template: 
+  template:
     src: nmoscommon_config.j2
     dest: /etc/nmoscommon/config.json
   when: package_name == "nmoscommon"

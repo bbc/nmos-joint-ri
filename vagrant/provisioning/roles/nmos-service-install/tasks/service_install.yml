@@ -1,6 +1,6 @@
 ---
 # module: nmos-service-install/tasks
-# description: Install NMOS systemd service 
+# description: Install NMOS systemd service
 
 - name: Create service file
   copy:
@@ -8,6 +8,12 @@
     dest: /lib/systemd/system
     remote_src: yes
   when: service_file != []
+
+- name: Make Testing Tool Service File
+  template:
+    src: systemd_service.j2
+    dest: /lib/systemd/system/python3-nmos-testing.service
+  when: package_name == "nmos-testing"
 
 - name: Change directory permissions for nmosauth config files
   file:
@@ -24,3 +30,11 @@
     enabled: true
     daemon_reload: true
   when: service_file != []
+
+- name: Restart Testing Tool service
+  systemd:
+    name: python3-nmos-testing.service
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  when: package_name == "nmos-testing"

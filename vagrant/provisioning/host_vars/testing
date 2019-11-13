@@ -1,0 +1,5 @@
+
+specific_packages_to_install:
+    - package_name: "nmos-testing"
+      repo_url: "https://github.com/AMWA-TV/nmos-testing"
+      branch_envvar: "NMOS_RI_TESTING_BRANCH"

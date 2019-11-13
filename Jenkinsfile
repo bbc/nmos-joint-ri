@@ -24,6 +24,7 @@ pipeline {
                     steps {
                         script {
                             env.int_result = "FAILURE"
+                            env.NMOS_RI_TESTING_BRANCH = "dannym-api"
                         }
                         bbcGithubNotify(context: "tests/integration", status: "PENDING")
                         dir ('vagrant') {
@@ -34,10 +35,15 @@ pipeline {
                 stage ("Run Integration Tests") {
                     steps {
                         bbcVagrantFindPorts(vagrantDir: "vagrant")
-                        sh 'python3 -m unittest discover'
+                        sh 'python3 -m unittest discover -v'
                         script {
                             env.int_result = "SUCCESS"
                         }
+                    }
+                }
+                stage ("Analyse JUnit files") {
+                    steps {
+                        junit 'tests/*.xml'
                     }
                 }
             }

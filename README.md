@@ -2,10 +2,11 @@
 
 ## Introduction
 
-This repository contains a Vagrant provisioning to build 3 virtual machines:
+This repository contains a Vagrant provisioning to build 4 virtual machines:
 * IS-04/05 node
 * IS-04 registry
 * BCP-003-02 Authorisation Server
+* NMOS Testing Tool
 
 The node VM will also present a user interface for interacting with the APIs, and another which allows senders and receivers to be added to a "mock driver". This mock driver takes the place of the interface that would normally exist between the APIs and a sender or receiver, and allows the user to add mock up senders or receivers to the Connection Management and Node APIs. Note that the VM does not contain any actual RTP senders or receivers - you cannot produce media streams using this software.
 
@@ -23,11 +24,13 @@ For the best experience:
 pip install ansible
 ```
 
-The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8859 to present the IS-05 API user interface. 
+The Node VM will bind to three host machine ports: 8884 to present the APIs themselves, 8858 to present the mock driver user interfaces and 8860 to present the IS-05 API user interface.
 
-The Registration and Query machine will present its APIs on port 8882. 
+The Registration and Query machine will present its APIs on port 8882.
 
-The Authorisation Server will present its APIs on port 8886. 
+The Authorisation Server will present its APIs on port 8886.
+
+The testing tool will present itself on port 8888.
 
 If these ports are already in use on the host machine the bindings may be changed in the Vagrant file.
 
@@ -129,6 +132,10 @@ vagrant ssh regquery
 vagrant ssh auth
 ```
 
+```
+vagrant ssh testing
+```
+
 The directories cloned down during setup are found in the home directory, but have root permissions. As such any operations on them require root privilidges. Software in the repositories may be built using:
 
 ```
@@ -160,6 +167,7 @@ NMOS_RI_QUERY_BRANCH
 NMOS_RI_REGISTRATION_BRANCH
 NMOS_RI_CONNECTION_BRANCH
 NMOS_RI_AUTH_BRANCH
+NMOS_RI_TESTING_BRANCH
 ```
 
 For example, the RI may be configured to use the "dev" branch of the reverse proxy as follows:
