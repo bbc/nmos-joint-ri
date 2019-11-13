@@ -3,18 +3,19 @@
 # description: Provision NMOS Joint RI VM
 
 - name: Install all required packages for nmos-joint-ri-setup
-  apt: 
+  apt:
     pkg: "{{ packages }}"
     state: present
+    update_cache: yes
 
 - name: Install Apache2 modules
   apache2_module:
     state: present
     name: "{{ item }}"
   with_items: "{{ apache_modules }}"
-    
+
 - name: Remove default Apache conf files
-  file: 
+  file:
     path: "{{ item }}"
     state: absent
   with_items:
