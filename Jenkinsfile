@@ -24,7 +24,6 @@ pipeline {
                     steps {
                         script {
                             env.int_result = "FAILURE"
-                            env.NMOS_RI_TESTING_BRANCH = "dannym-api"
                         }
                         bbcGithubNotify(context: "tests/integration", status: "PENDING")
                         dir ('vagrant') {
