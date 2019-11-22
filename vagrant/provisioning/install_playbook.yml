@@ -22,6 +22,16 @@
         required_debs: "{{ item.required_debs | default([]) }}"
       with_items: "{{ common_packages_to_install + specific_packages_to_install }}"
 
+# Ensure etcd service is running on registry hosts
+- hosts: regquery
+  become: yes
+  tasks:
+    - name: Etcd service start
+      service:
+        name: etcd
+        enabled: yes
+        state: started
+
 - hosts: node
   become: yes
   roles:
