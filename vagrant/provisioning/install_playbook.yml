@@ -6,6 +6,16 @@
   roles:
     - nmos-joint-ri-setup
 
+# Ensure etcd service is running on registry hosts
+- hosts: regquery
+  become: yes
+  tasks:
+    - name: Etcd service start
+      service:
+        name: etcd
+        enabled: yes
+        state: started
+
 # Install each service defined in dev_package_install_list variable
 - hosts: all
   become: yes
